@@ -1,0 +1,2 @@
+# Create a new video
+GET http://localhost:3000/api/ffmpeg/create
