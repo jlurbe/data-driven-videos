@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { ManageVideosController } from './manage-videos.controller';
 import { ManageVideosMockedRepository } from './repositories/implementations/manage-videos-mocked.repository';
 import { ManageVideosRepository } from './repositories/manage-videos.repository';
@@ -8,6 +8,7 @@ import { MANAGE_VIDEOS_SERVICE_NAME } from './constants/manage-videos.constants'
 @Module({
   controllers: [ManageVideosController],
   providers: [
+    Logger,
     ManageVideosMockedRepository,
     {
       provide: MANAGE_VIDEOS_SERVICE_NAME,

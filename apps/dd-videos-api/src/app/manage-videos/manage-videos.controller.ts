@@ -1,10 +1,10 @@
-import { Controller, Get, Inject } from '@nestjs/common';
+import { Controller, Get, Inject, Logger } from '@nestjs/common';
 import FfmpegStatic from 'ffmpeg-static';
 import ffmpeg from 'fluent-ffmpeg';
-import config from '../config';
 import ffprobeInstaller from '@ffprobe-installer/ffprobe';
 import path from 'node:path';
 import fs from 'node:fs';
+import config from '../config';
 import { VideoScenesModel } from './models/video-scenes.model';
 import { iberiaUser } from './repositories/implementations/mocked-data/iberia-user.mock';
 import { ManageVideosService } from './services/manage-videos.service';
@@ -17,7 +17,8 @@ export class ManageVideosController {
 
   constructor(
     @Inject(MANAGE_VIDEOS_SERVICE_NAME)
-    private manageVideosService: ManageVideosService
+    private readonly manageVideosService: ManageVideosService,
+    private readonly logger: Logger
   ) {
     ffmpeg.setFfmpegPath(FfmpegStatic);
     ffmpeg.setFfprobePath(ffprobeInstaller.path);
@@ -58,7 +59,7 @@ export class ManageVideosController {
 
     const scene = ffmpeg(videoPath);
 
-    let i = 1;
+    let i = 0;
     videoScene.videoTexts.forEach((videoText) => {
       const fontfile =
         videoText.style === 'regular'
@@ -66,9 +67,8 @@ export class ManageVideosController {
           : `${config.api.pathUrl}/assets/fonts/Nexa-Heavy.ttf`;
 
       // Create file with text to display
-      // Needed to avoit the special characters issue in drawtext
-      const textfile = `${tmpFolder}/txt/${videoName}-${i}.txt`;
-      i++;
+      // Needed to avoid the special characters issue in drawtext
+      const textfile = `${tmpFolder}/txt/${videoName}-${i++}.txt`;
       fs.writeFileSync(
         textfile,
         this.transformTextWithFields(videoText.text, iberiaUser)
@@ -106,23 +106,13 @@ export class ManageVideosController {
     // Video length in seconds
     scene.duration(videoScene.duration);
     // Video resolution
-    scene.size('848x480');
-    // scene.size('1280x720');
+    // scene.size('848x480');
+    scene.size('1280x720');
     // Output file
     scene.save(`${tmpFolder}/${videoName}.mp4`);
-    // The callback that is run when FFmpeg starts
-    scene.on('start', () => {
-      console.log(`Processing ${videoName}.mp4`);
-    });
-    // Log the percentage of work completed
-    // scene.on('progress', (progress) => {
-    //   if (progress.percent) {
-    //     console.log(`Processing ${videoName}.mp4: ${progress.percent}% done`);
-    //   }
-    // });
     // The callback that is run when FFmpeg is finished
     scene.on('end', () => {
-      console.log(`${videoName}.mp4 created correctly`);
+      this.logger.log(`${videoName}.mp4 created correctly`);
 
       if (videoScenes.length > 0) {
         this.formatVideo(videoScenes, tmpFolder);
@@ -132,7 +122,7 @@ export class ManageVideosController {
     });
     // The callback that is run when FFmpeg encountered an error
     scene.on('error', (error) => {
-      console.error(error);
+      this.logger.error(error);
     });
   }
 
@@ -168,15 +158,9 @@ export class ManageVideosController {
       .size('1024x768')
       // Output file
       .save(`${config.api.pathUrl}/tmp/${imageName}.mp4`)
-      // Log the percentage of work completed
-      .on('progress', (progress) => {
-        if (progress.percent) {
-          console.log(`Processing ${imageName}.mp4: ${progress.percent}% done`);
-        }
-      })
       // The callback that is run when FFmpeg is finished
       .on('end', () => {
-        console.log(`${imageName}.mp4 created correctly`);
+        this.logger.log(`${imageName}.mp4 created correctly`);
 
         if (imageArray.length > 0) {
           this.videoFromImages(imageArray);
@@ -186,7 +170,7 @@ export class ManageVideosController {
       })
       // The callback that is run when FFmpeg encountered an error
       .on('error', (error) => {
-        console.error(error);
+        this.logger.error(error);
       });
   }
 
@@ -203,20 +187,14 @@ export class ManageVideosController {
     });
 
     mergedVideo
-      .on('start', function () {
-        console.log('Merging start...');
-      })
-      // Log the percentage of work completed
-      .on('progress', (progress) => {
-        if (progress.percent) {
-          console.log(`Meging result.mp4: ${progress.percent}% done`);
-        }
+      .on('start', () => {
+        this.logger.log(`Merging ${this.uuid}.mp4 start...`);
       })
       .on('error', (err) => {
-        console.log('An error occurred: ' + err.message);
+        this.logger.log('An error occurred: ' + err.message);
       })
       .on('end', () => {
-        console.log('Merging finished');
+        this.logger.log(`Merging ${this.uuid}.mp4 finished`);
 
         // Add audio track
         this.addMusicTrack(outputFile, audioFile, tmpFolder);
@@ -236,23 +214,17 @@ export class ManageVideosController {
       .audioFilters([`afade=t=out:st=${this.totalTime - 5}:d=5`])
       .output(outputVideoFilePath)
       .outputOptions(['-map 0:v', '-map 1:a', '-c:v copy', '-shortest'])
-      .on('start', function () {
-        console.log('Adding audio track starting...');
-      })
-      // Log the percentage of work completed
-      .on('progress', (progress) => {
-        if (progress.percent) {
-          console.log(`Adding audio track: ${progress.percent}% done`);
-        }
+      .on('start', () => {
+        this.logger.log('Adding audio track starting...');
       })
       .on('error', (err) => {
-        console.log('An error occurred: ' + err.message);
+        this.logger.log('An error occurred: ' + err.message);
       })
       .on('end', () => {
         // remove tmp folder
         fs.rmSync(tmpFolder, { recursive: true, force: true });
-        console.log(`Removed tmp folder: ${tmpFolder}`);
-        console.log('Adding audio track completed');
+        this.logger.log(`Removed tmp folder: ${tmpFolder}`);
+        this.logger.log('Adding audio track completed');
       })
       .run();
   }
@@ -272,22 +244,6 @@ export class ManageVideosController {
       );
     });
 
-    // Transform special characters
-    // textToTransform = this.escape(textToTransform);
-    // .replace('\\', '\\\\\\\\\\\\\\\\')
-    // .replace("'", "\\\\\\'")
-    // .replaceAll('%', '\\\\\\\\%')
-    //.replaceAll(/:/g, '\u003A');
-
-    // console.log(textToTransform);
     return textToTransform;
-  }
-
-  private escape(text) {
-    return text
-      .replaceAll('\\', '\\\\\\\\\\\\\\\\')
-      .replaceAll("'", "\\\\\\'")
-      .replaceAll('%', '\\\\\\\\\\%')
-      .replaceAll(':', '\\\\\\\\\\\\:');
   }
 }

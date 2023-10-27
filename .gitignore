@@ -3,6 +3,7 @@
 # compiled output
 dist
 /out-tsc
+tmp
 
 # dependencies
 node_modules
@@ -41,3 +42,6 @@ Thumbs.db
 # ENV files
 .env
 .env.*
+
+# Log files
+logs
