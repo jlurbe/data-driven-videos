@@ -1,4 +1,8 @@
-export type VideoScenesModel = VideoScene[];
+export interface VideoScenesModel {
+  audioTrack: string;
+  scenes: VideoScene[];
+  fillInData: Record<string, any>[];
+}
 
 export interface VideoScene {
   scene: number;
@@ -7,13 +11,13 @@ export interface VideoScene {
   videoTexts: VideoText[];
 }
 
-interface VideoText {
+export interface VideoText {
   text: string;
   style: string;
   position: VideoPosition;
 }
 
-interface VideoPosition {
+export interface VideoPosition {
   x: string;
   y: string;
 }

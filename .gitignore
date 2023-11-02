@@ -45,3 +45,6 @@ Thumbs.db
 
 # Log files
 logs
+
+# Google APIs credentials
+credentials.json
