@@ -108,8 +108,8 @@ export class GenerateVideoService {
         }
       });
       // The callback that is run when FFmpeg encountered an error
-      scene.on('error', (error) => {
-        this.logger.error(error);
+      scene.on('error', (err) => {
+        this.logger.error(`${this.uuid}: An error occurred: ${err.message}`);
         reject();
       });
     });
@@ -184,7 +184,7 @@ export class GenerateVideoService {
           this.logger.log(`${this.uuid}: Merging ${this.uuid}.mp4 start...`);
         })
         .on('error', (err) => {
-          this.logger.log(`${this.uuid}: An error occurred: ${err.message}`);
+          this.logger.error(`${this.uuid}: An error occurred: ${err.message}`);
           reject();
         })
         .on('end', () => {
@@ -214,7 +214,7 @@ export class GenerateVideoService {
           this.logger.log(`${this.uuid}: Adding audio track starting...`);
         })
         .on('error', (err) => {
-          this.logger.log(`${this.uuid}: An error occurred: ${err.message}`);
+          this.logger.error(`${this.uuid}: An error occurred: ${err.message}`);
           reject;
         })
         .on('end', () => {

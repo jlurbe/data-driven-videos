@@ -9,6 +9,7 @@ import { ProjectsModel } from '../../models/projects.model';
 import { ScenesModel } from '../../models/scenes.model';
 import { SceneTextsModel } from '../../models/scene-texts.model';
 import { ManageVideosMapper } from './mappers/manage-videos.mapper';
+import { GSheetsError } from '../../../shared/errors/errors';
 
 const spreadsheetId = '14E65Z7M22MEEP_3IUqBQqHU6IuXqA7HBxiJFToTRP6U';
 
@@ -36,6 +37,10 @@ export class ManageVideosGsheetsRepository implements ManageVideosRepository {
       (project) => project.id === projectId
     );
 
+    if (!selectedProject) {
+      throw new GSheetsError('Project id not found');
+    }
+
     // Get scenes data
     const scenesData = (await getSpreadSheetValues({
       auth: this.authToken,
@@ -45,6 +50,10 @@ export class ManageVideosGsheetsRepository implements ManageVideosRepository {
     const selectedScenes = scenesData.filter(
       (scene) => scene.projectId === selectedProject.id
     );
+
+    if (!selectedScenes || selectedScenes.length === 0) {
+      throw new GSheetsError('Scenes not found');
+    }
 
     // Get text scenes data
     const textScenesData = (await getSpreadSheetValues({
