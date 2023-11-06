@@ -8,7 +8,7 @@ import { iberiaUser } from './mocked-data/iberia-user.mock';
 export class ManageVideosMockedRepository implements ManageVideosRepository {
   async getVideoScenesData(): Promise<VideoScenesModel> {
     return {
-      audioTrack: 'Spirit of Fire.mp3',
+      audioFileName: 'Spirit of Fire.mp3',
       scenes: videoScenes,
       fillInData: iberiaUser,
     };

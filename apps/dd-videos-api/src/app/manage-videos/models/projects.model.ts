@@ -3,6 +3,6 @@ export type ProjectsModel = Project[];
 export interface Project {
   id: number;
   name: string;
-  audioTrack: string;
+  audioFileName: string;
   dataTable: string;
 }

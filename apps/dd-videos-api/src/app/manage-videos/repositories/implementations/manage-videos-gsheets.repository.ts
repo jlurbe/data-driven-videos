@@ -10,6 +10,7 @@ import { ScenesModel } from '../../models/scenes.model';
 import { SceneTextsModel } from '../../models/scene-texts.model';
 import { ManageVideosMapper } from './mappers/manage-videos.mapper';
 import { GSheetsError } from '../../../shared/errors/errors';
+import { GetVideoScenesDataModel } from '../../models/get-video-scenes-data.model';
 
 const spreadsheetId = '14E65Z7M22MEEP_3IUqBQqHU6IuXqA7HBxiJFToTRP6U';
 
@@ -23,7 +24,9 @@ export class ManageVideosGsheetsRepository implements ManageVideosRepository {
     }
   }
 
-  async getVideoScenesData(projectId: number): Promise<VideoScenesModel> {
+  async getVideoScenesData({
+    projectId,
+  }: GetVideoScenesDataModel): Promise<VideoScenesModel> {
     // Gets the token if it's not ready
     await this.getToken();
 
@@ -73,7 +76,7 @@ export class ManageVideosGsheetsRepository implements ManageVideosRepository {
     });
 
     return {
-      audioTrack: selectedProject.audioTrack,
+      audioFileName: selectedProject.audioFileName,
       scenes: await ManageVideosMapper.mapScenes(
         selectedScenes,
         selectedTextScenes

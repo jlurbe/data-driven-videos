@@ -6,9 +6,15 @@ import path from 'node:path';
 import fs from 'node:fs';
 import config from '../../config';
 import { VideoScene } from '../models/video-scenes.model';
+import { FormatVideoModel } from '../models/format-video.model';
+import { MergeVideosModel } from '../models/merge-videos.model';
+import { AddMusicTrackModel } from '../models/add-music-track.model';
+import { CreateFolderModel } from '../models/create-folder.model';
+import { TransformText } from '../models/transform-text.model';
 
 export class GenerateVideoService {
   private uuid: string;
+  private projectId: number;
   private totalTime = 0;
 
   constructor(private readonly logger: Logger) {
@@ -16,14 +22,16 @@ export class GenerateVideoService {
     ffmpeg.setFfprobePath(ffprobeInstaller.path);
   }
 
-  async formatVideo(
-    videoScenes: VideoScene[],
-    audioTrack: string,
-    data: Record<string, any>,
-    tmpFolder?: string
-  ): Promise<void> {
+  async formatVideo({
+    videoScenes,
+    audioFileName,
+    data,
+    projectId,
+    tmpFolder,
+  }: FormatVideoModel): Promise<void> {
     const videoScene = videoScenes.shift();
     this.uuid = data.uuid;
+    this.projectId = projectId;
     this.totalTime += videoScene.duration;
 
     const videoPath = `${config.api.pathUrl}/sources/${videoScene.videoSource}`;
@@ -34,13 +42,10 @@ export class GenerateVideoService {
     const FOD = 1.5; // fade out duration
 
     // Create tmp directory
+    const projectDir = `project${projectId.toString().padStart(2, '0')}`;
     if (!tmpFolder) {
-      tmpFolder = `${config.api.pathUrl}/tmp/${this.uuid}`;
-
-      if (!fs.existsSync(tmpFolder)) {
-        fs.mkdirSync(tmpFolder);
-        fs.mkdirSync(`${tmpFolder}/txt`);
-      }
+      tmpFolder = `${config.api.pathUrl}/tmp/${projectDir}/${this.uuid}`;
+      await this.createFolder({ folder: `${tmpFolder}/txt` });
     }
 
     return new Promise((resolve, reject) => {
@@ -58,7 +63,10 @@ export class GenerateVideoService {
         const textfile = `${tmpFolder}/txt/${videoName}-${i++}.txt`;
         fs.writeFileSync(
           textfile,
-          this.transformTextWithFields(videoText.text, data)
+          this.transformTextWithFields({
+            textToTransform: videoText.text,
+            fields: data,
+          })
         );
 
         scene.videoFilters([
@@ -102,9 +110,17 @@ export class GenerateVideoService {
         this.logger.log(`${this.uuid}: ${videoName}.mp4 created correctly`);
 
         if (videoScenes.length > 0) {
-          resolve(this.formatVideo(videoScenes, audioTrack, data, tmpFolder));
+          resolve(
+            this.formatVideo({
+              videoScenes,
+              audioFileName,
+              data,
+              projectId,
+              tmpFolder,
+            })
+          );
         } else {
-          resolve(this.mergeVideos(tmpFolder, audioTrack));
+          resolve(this.mergeVideos({ tmpFolder, audioFileName }));
         }
       });
       // The callback that is run when FFmpeg encountered an error
@@ -163,12 +179,12 @@ export class GenerateVideoService {
       });
   }
 
-  private async mergeVideos(
-    tmpFolder: string,
-    audioFileName: string
-  ): Promise<void> {
-    const outputFile = `${tmpFolder}/${this.uuid}.mp4`;
-    const audioFile = `${config.api.pathUrl}/sources/${audioFileName}`;
+  private async mergeVideos({
+    tmpFolder,
+    audioFileName,
+  }: MergeVideosModel): Promise<void> {
+    const inputVideoFilePath = `${tmpFolder}/${this.uuid}.mp4`;
+    const inputAudioFilePath = `${config.api.pathUrl}/sources/${audioFileName}`;
 
     return new Promise((resolve, reject) => {
       const mergedVideo = ffmpeg();
@@ -191,18 +207,27 @@ export class GenerateVideoService {
           this.logger.log(`${this.uuid}: Merging ${this.uuid}.mp4 finished`);
 
           // Add audio track
-          resolve(this.addMusicTrack(outputFile, audioFile, tmpFolder));
+          resolve(
+            this.addMusicTrack({
+              inputVideoFilePath,
+              inputAudioFilePath,
+              tmpFolder,
+            })
+          );
         })
-        .mergeToFile(outputFile, tmpFolder);
+        .mergeToFile(inputVideoFilePath, tmpFolder);
     });
   }
 
-  private async addMusicTrack(
-    inputVideoFilePath: string,
-    inputAudioFilePath: string,
-    tmpFolder: string
-  ): Promise<void> {
-    const outputVideoFilePath = `${config.api.pathUrl}/video/${this.uuid}.mp4`;
+  private async addMusicTrack({
+    inputVideoFilePath,
+    inputAudioFilePath,
+    tmpFolder,
+  }: AddMusicTrackModel): Promise<void> {
+    const projectDir = `project${this.projectId.toString().padStart(2, '0')}`;
+    const projectPath = `${config.api.pathUrl}/video/${projectDir}`;
+    const outputVideoFilePath = `${config.api.pathUrl}/video/${projectDir}/${this.uuid}.mp4`;
+    await this.createFolder({ folder: projectPath });
 
     return new Promise((resolve, reject) => {
       ffmpeg(inputVideoFilePath)
@@ -220,6 +245,7 @@ export class GenerateVideoService {
         .on('end', () => {
           // remove tmp folder
           fs.rmSync(tmpFolder, { recursive: true, force: true });
+          this.logger.log(`${this.uuid}: Removed tmp folder - ${tmpFolder}`);
           this.logger.log(`${this.uuid}: Adding audio track completed`);
           resolve();
         })
@@ -227,7 +253,10 @@ export class GenerateVideoService {
     });
   }
 
-  private transformTextWithFields(textToTransform: string, fields): string {
+  private transformTextWithFields({
+    textToTransform,
+    fields,
+  }: TransformText): string {
     Object.keys(fields).forEach((field) => {
       textToTransform = textToTransform.replace(
         new RegExp(`__${field}__`, 'g'),
@@ -243,5 +272,11 @@ export class GenerateVideoService {
     });
 
     return textToTransform;
+  }
+
+  private async createFolder({ folder }: CreateFolderModel): Promise<void> {
+    if (!fs.existsSync(folder)) {
+      fs.mkdirSync(folder, { recursive: true });
+    }
   }
 }

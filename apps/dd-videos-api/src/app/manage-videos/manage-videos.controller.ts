@@ -7,10 +7,13 @@ import {
   Logger,
   Param,
 } from '@nestjs/common';
+import fs from 'node:fs';
+import config from '../config';
 import { ManageVideosService } from './services/manage-videos.service';
 import { MANAGE_VIDEOS_SERVICE_NAME } from './constants/manage-videos.constants';
 import { GenerateVideoService } from './services/generate-video.service';
 import { ResponseModel } from './models/response.model';
+import { CreationMode } from './models/creation-mode.enum';
 
 @Controller('ffmpeg')
 export class ManageVideosController {
@@ -20,22 +23,56 @@ export class ManageVideosController {
     private readonly logger: Logger
   ) {}
 
-  @Get('create/:projectId')
-  async create(@Param('projectId') projectId: number): Promise<ResponseModel> {
+  /**
+   * Executes the data driven creation
+   * @param projectId
+   * @param creationMode values: "only-missing" (default), "all". If "all" it will remove all generated videos and it will create them once again
+   * @returns
+   */
+  @Get('create/:projectId/:creationMode?')
+  async create(
+    @Param('projectId') projectId: number,
+    @Param('creationMode') creationMode: CreationMode
+  ): Promise<ResponseModel> {
     try {
-      const scenesData = await this.manageVideosService.getVideoScenesData(
-        projectId
-      );
+      creationMode =
+        creationMode === CreationMode.All
+          ? CreationMode.All
+          : CreationMode.OnlyMissing;
 
-      const { audioTrack, scenes, fillInData } = scenesData;
+      // Remove tmp and videos processed folder
+      const videosFolder = `${config.api.pathUrl}/video/project${projectId
+        .toString()
+        .padStart(2, '0')}`;
+      const tmpFolder = `${config.api.pathUrl}/tmp/project${projectId
+        .toString()
+        .padStart(2, '0')}`;
 
-      await Promise.all(
+      if (creationMode === CreationMode.All) {
+        await fs.promises.rm(videosFolder, { recursive: true, force: true });
+      }
+      await fs.promises.rm(tmpFolder, { recursive: true, force: true });
+
+      const scenesData = await this.manageVideosService.getVideoScenesData({
+        projectId,
+      });
+
+      const { audioFileName, scenes, fillInData } = scenesData;
+
+      const processedVideos = fs
+        .readdirSync(videosFolder)
+        .map((video) => video.replace('.mp4', ''));
+
+      await Promise.allSettled(
         fillInData.map(async (data) => {
-          await new GenerateVideoService(this.logger).formatVideo(
-            [...scenes],
-            audioTrack,
-            data
-          );
+          if (!processedVideos.includes(data.uuid)) {
+            await new GenerateVideoService(this.logger).formatVideo({
+              videoScenes: [...scenes],
+              audioFileName,
+              data,
+              projectId,
+            });
+          }
         })
       );
 
