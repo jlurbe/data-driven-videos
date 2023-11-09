@@ -76,7 +76,7 @@ export class ManageVideosGsheetsRepository implements ManageVideosRepository {
     });
 
     return {
-      audioFileName: selectedProject.audioFileName,
+      audioFile: selectedProject.audioFile,
       scenes: await ManageVideosMapper.mapScenes(
         selectedScenes,
         selectedTextScenes

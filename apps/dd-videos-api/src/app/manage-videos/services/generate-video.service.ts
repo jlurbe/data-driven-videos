@@ -5,7 +5,6 @@ import ffprobeInstaller from '@ffprobe-installer/ffprobe';
 import path from 'node:path';
 import fs from 'node:fs';
 import config from '../../config';
-import { VideoScene } from '../models/video-scenes.model';
 import { FormatVideoModel } from '../models/format-video.model';
 import { MergeVideosModel } from '../models/merge-videos.model';
 import { AddMusicTrackModel } from '../models/add-music-track.model';
@@ -24,7 +23,7 @@ export class GenerateVideoService {
 
   async formatVideo({
     videoScenes,
-    audioFileName,
+    audioFile,
     data,
     projectId,
     tmpFolder,
@@ -34,7 +33,7 @@ export class GenerateVideoService {
     this.projectId = projectId;
     this.totalTime += videoScene.duration;
 
-    const videoPath = `${config.api.pathUrl}/sources/${videoScene.videoSource}`;
+    const videoPath = videoScene.videoSource;
     const videoName = 'scene' + videoScene.scene.toString().padStart(2, '0');
     const DS = 1.0; // display start
     const DE = videoScene.duration - 1; // display end
@@ -113,14 +112,14 @@ export class GenerateVideoService {
           resolve(
             this.formatVideo({
               videoScenes,
-              audioFileName,
+              audioFile,
               data,
               projectId,
               tmpFolder,
             })
           );
         } else {
-          resolve(this.mergeVideos({ tmpFolder, audioFileName }));
+          resolve(this.mergeVideos({ tmpFolder, audioFile }));
         }
       });
       // The callback that is run when FFmpeg encountered an error
@@ -181,10 +180,10 @@ export class GenerateVideoService {
 
   private async mergeVideos({
     tmpFolder,
-    audioFileName,
+    audioFile,
   }: MergeVideosModel): Promise<void> {
     const inputVideoFilePath = `${tmpFolder}/${this.uuid}.mp4`;
-    const inputAudioFilePath = `${config.api.pathUrl}/sources/${audioFileName}`;
+    const inputAudioFilePath = audioFile;
 
     return new Promise((resolve, reject) => {
       const mergedVideo = ffmpeg();

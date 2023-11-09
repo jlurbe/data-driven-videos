@@ -1,5 +1,5 @@
 export interface VideoScenesModel {
-  audioFileName: string;
+  audioFile: string;
   scenes: VideoScene[];
   fillInData: Record<string, any>[];
 }

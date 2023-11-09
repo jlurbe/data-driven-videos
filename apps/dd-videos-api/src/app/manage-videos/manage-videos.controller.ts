@@ -57,7 +57,7 @@ export class ManageVideosController {
         projectId,
       });
 
-      const { audioFileName, scenes, fillInData } = scenesData;
+      const { audioFile, scenes, fillInData } = scenesData;
 
       const processedVideos = fs
         .readdirSync(videosFolder)
@@ -68,7 +68,7 @@ export class ManageVideosController {
           if (!processedVideos.includes(data.uuid)) {
             await new GenerateVideoService(this.logger).formatVideo({
               videoScenes: [...scenes],
-              audioFileName,
+              audioFile,
               data,
               projectId,
             });
