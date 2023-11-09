@@ -4,7 +4,6 @@ import ffmpeg from 'fluent-ffmpeg';
 import ffprobeInstaller from '@ffprobe-installer/ffprobe';
 import path from 'node:path';
 import fs from 'node:fs';
-import config from '../../config';
 import { FormatVideoModel } from '../models/format-video.model';
 import { MergeVideosModel } from '../models/merge-videos.model';
 import { AddMusicTrackModel } from '../models/add-music-track.model';
