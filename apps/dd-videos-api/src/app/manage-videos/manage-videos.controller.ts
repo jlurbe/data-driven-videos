@@ -8,7 +8,6 @@ import {
   Param,
 } from '@nestjs/common';
 import fs from 'node:fs';
-import config from '../config';
 import { ManageVideosService } from './services/manage-videos.service';
 import { MANAGE_VIDEOS_SERVICE_NAME } from './constants/manage-videos.constants';
 import { GenerateVideoService } from './services/generate-video.service';
@@ -41,10 +40,10 @@ export class ManageVideosController {
           : CreationMode.OnlyMissing;
 
       // Remove tmp and videos processed folder
-      const videosFolder = `${config.api.pathUrl}/video/project${projectId
+      const videosFolder = `${__dirname}/video/project${projectId
         .toString()
         .padStart(2, '0')}`;
-      const tmpFolder = `${config.api.pathUrl}/tmp/project${projectId
+      const tmpFolder = `${__dirname}/tmp/project${projectId
         .toString()
         .padStart(2, '0')}`;
 
@@ -59,9 +58,15 @@ export class ManageVideosController {
 
       const { audioFile, scenes, fillInData } = scenesData;
 
-      const processedVideos = fs
-        .readdirSync(videosFolder)
-        .map((video) => video.replace('.mp4', ''));
+      // Already created videos control
+      let processedVideos: string[];
+      try {
+        processedVideos = fs
+          .readdirSync(videosFolder)
+          .map((video) => video.replace('.mp4', ''));
+      } catch (error) {
+        processedVideos = [];
+      }
 
       await Promise.allSettled(
         fillInData.map(async (data) => {
@@ -78,7 +83,7 @@ export class ManageVideosController {
 
       return { message: 'success' };
     } catch (error) {
-      if (error?.message) this.logger.error(error.message);
+      if (error?.message) this.logger.error(error);
       throw new HttpException(
         error?.message ?? 'Internal Server Error',
         HttpStatus.INTERNAL_SERVER_ERROR

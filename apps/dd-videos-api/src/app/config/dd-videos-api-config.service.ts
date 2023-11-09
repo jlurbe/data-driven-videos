@@ -19,7 +19,6 @@ export class DDVideosApiConfigService {
         version: process.env.API_VERSION || 'v1',
         prefix: process.env.API_PREFIX || '',
         envPrefix: process.env.ENV_PREFIX || '',
-        pathUrl: process.env.PATH_URL,
       },
     };
   }

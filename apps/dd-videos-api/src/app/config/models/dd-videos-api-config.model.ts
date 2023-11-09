@@ -5,6 +5,5 @@ export interface DDVideosApiConfigModel {
     version: string;
     prefix: string;
     envPrefix: string;
-    pathUrl: string;
   };
 }

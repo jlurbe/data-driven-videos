@@ -43,7 +43,7 @@ export class GenerateVideoService {
     // Create tmp directory
     const projectDir = `project${projectId.toString().padStart(2, '0')}`;
     if (!tmpFolder) {
-      tmpFolder = `${config.api.pathUrl}/tmp/${projectDir}/${this.uuid}`;
+      tmpFolder = `${__dirname}/tmp/${projectDir}/${this.uuid}`;
       await this.createFolder({ folder: `${tmpFolder}/txt` });
     }
 
@@ -54,8 +54,8 @@ export class GenerateVideoService {
       videoScene.videoTexts.forEach((videoText) => {
         const fontfile =
           videoText.style === 'regular'
-            ? `${config.api.pathUrl}/assets/fonts/Nexa-ExtraLight.ttf`
-            : `${config.api.pathUrl}/assets/fonts/Nexa-Heavy.ttf`;
+            ? `${__dirname}/assets/fonts/Nexa-ExtraLight.ttf`
+            : `${__dirname}/assets/fonts/Nexa-Heavy.ttf`;
 
         // Create file with text to display
         // Needed to avoid the special characters issue in drawtext
@@ -146,7 +146,7 @@ export class GenerateVideoService {
         {
           filter: 'drawtext',
           options: {
-            fontfile: `${config.api.pathUrl}/assets/fonts/LEMONMILK-Regular.otf`,
+            fontfile: `${__dirname}/assets/fonts/LEMONMILK-Regular.otf`,
             text: 'CUSTOM TEXT',
             fontsize: 24,
             fontcolor_expr: `ffffff%{eif\\: clip(255*(1*between(t\\, ${DS} + ${FID}\\, ${DE} - ${FOD}) + ((t - ${DS})/${FID})*between(t\\, ${DS}\\, ${DS} + ${FID}) + (-(t - ${DE})/${FOD})*between(t\\, ${DE} - ${FOD}\\, ${DE}) )\\, 0\\, 255) \\: x\\: 2 }`,
@@ -161,7 +161,7 @@ export class GenerateVideoService {
       ])
       .size('1024x768')
       // Output file
-      .save(`${config.api.pathUrl}/tmp/${imageName}.mp4`)
+      .save(`${__dirname}/tmp/${imageName}.mp4`)
       // The callback that is run when FFmpeg is finished
       .on('end', () => {
         this.logger.log(`${imageName}.mp4 created correctly`);
@@ -224,8 +224,8 @@ export class GenerateVideoService {
     tmpFolder,
   }: AddMusicTrackModel): Promise<void> {
     const projectDir = `project${this.projectId.toString().padStart(2, '0')}`;
-    const projectPath = `${config.api.pathUrl}/video/${projectDir}`;
-    const outputVideoFilePath = `${config.api.pathUrl}/video/${projectDir}/${this.uuid}.mp4`;
+    const projectPath = `${__dirname}/video/${projectDir}`;
+    const outputVideoFilePath = `${__dirname}/video/${projectDir}/${this.uuid}.mp4`;
     await this.createFolder({ folder: projectPath });
 
     return new Promise((resolve, reject) => {
