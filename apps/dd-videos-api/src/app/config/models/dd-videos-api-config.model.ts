@@ -6,6 +6,7 @@ export interface DDVideosApiConfigModel {
     prefix: string;
     envPrefix: string;
     uploadMode: string;
+    spreadsheetId: string;
   };
   aws: {
     s3: {

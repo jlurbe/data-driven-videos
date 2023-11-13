@@ -20,6 +20,7 @@ export class DDVideosApiConfigService {
         prefix: process.env.API_PREFIX || '',
         envPrefix: process.env.ENV_PREFIX || '',
         uploadMode: process.env.UPLOAD_MODE || '',
+        spreadsheetId: process.env.SPREADSHEET_ID,
       },
       aws: {
         s3: {

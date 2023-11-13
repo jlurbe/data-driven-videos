@@ -2,7 +2,6 @@ import { Logger } from '@nestjs/common';
 import FfmpegStatic from 'ffmpeg-static';
 import ffmpeg from 'fluent-ffmpeg';
 import ffprobeInstaller from '@ffprobe-installer/ffprobe';
-import path from 'node:path';
 import fs from 'node:fs';
 import { FormatVideoModel } from '../models/format-video.model';
 import { MergeVideosModel } from '../models/merge-videos.model';

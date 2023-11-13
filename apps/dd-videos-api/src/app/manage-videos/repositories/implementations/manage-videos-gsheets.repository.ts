@@ -11,8 +11,9 @@ import { SceneTextsModel } from '../../models/scene-texts.model';
 import { ManageVideosMapper } from './mappers/manage-videos.mapper';
 import { GSheetsError } from '../../../shared/errors/errors';
 import { GetVideoScenesDataModel } from '../../models/get-video-scenes-data.model';
+import config from '../../../config';
 
-const spreadsheetId = '14E65Z7M22MEEP_3IUqBQqHU6IuXqA7HBxiJFToTRP6U';
+const spreadsheetId = config.api.spreadsheetId;
 
 @Injectable()
 export class ManageVideosGsheetsRepository implements ManageVideosRepository {
