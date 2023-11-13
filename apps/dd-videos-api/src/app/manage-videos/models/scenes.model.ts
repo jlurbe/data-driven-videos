@@ -4,5 +4,5 @@ export interface Scene {
   id: number;
   projectId: number;
   duration: string;
-  videoSource: string;
+  source: string;
 }

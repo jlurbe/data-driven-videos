@@ -33,11 +33,11 @@ export class ManageVideosController {
   @Get('create/:projectId')
   async create(@Param('projectId') projectId: number): Promise<ResponseModel> {
     try {
-      // Remove tmp and videos processed folder
       const projectFolder = `project${projectId.toString().padStart(2, '0')}`;
-      const videosFolder = `${__dirname}/video/project${projectFolder}`;
-      const tmpFolder = `${__dirname}/tmp/project${projectFolder}`;
+      const videosFolder = `${__dirname}/video/${projectFolder}`;
+      const tmpFolder = `${__dirname}/tmp/${projectFolder}`;
 
+      // Remove tmp and videos processed folder
       await fs.promises.rm(tmpFolder, { recursive: true, force: true });
 
       const scenesData = await this.manageVideosService.getVideoScenesData({

@@ -14,7 +14,7 @@ export class ManageVideosMapper {
       return {
         scene: scene.id,
         duration: parseInt(scene.duration.toString()),
-        videoSource: scene.videoSource,
+        source: scene.source,
         videoTexts: this.mapSceneTexts(sceneTextsData, scene.id),
       };
     });

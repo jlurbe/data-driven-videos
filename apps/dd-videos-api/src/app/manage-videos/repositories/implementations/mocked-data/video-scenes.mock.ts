@@ -5,7 +5,7 @@ export const videoScenes: VideoScene[] = [
   {
     scene: 1,
     duration: 8,
-    videoSource: 'iberia_001.mp4',
+    source: 'iberia_001.mp4',
     videoTexts: [
       {
         text: `
@@ -28,7 +28,7 @@ Te damos la bienvenida a tu historia con Iberia.
   {
     scene: 2,
     duration: 8,
-    videoSource: 'iberia_002.mp4',
+    source: 'iberia_002.mp4',
     videoTexts: [
       {
         text: `
@@ -51,7 +51,7 @@ _up_firstFlightClass_up_
   {
     scene: 3,
     duration: 8,
-    videoSource: 'iberia_001.mp4',
+    source: 'iberia_001.mp4',
     videoTexts: [
       {
         text: `
@@ -73,7 +73,7 @@ __favouriteDestinations__.
   {
     scene: 4,
     duration: 8,
-    videoSource: 'iberia_002.mp4',
+    source: 'iberia_002.mp4',
     videoTexts: [
       {
         text: `
@@ -101,7 +101,7 @@ __visitedCountries__ países
   {
     scene: 5,
     duration: 8,
-    videoSource: 'iberia_001.mp4',
+    source: 'iberia_001.mp4',
     videoTexts: [
       {
         text: `
@@ -130,7 +130,7 @@ Lo que equivale a __traveledAroundEarth__ vueltas a la tierra
   {
     scene: 6,
     duration: 8,
-    videoSource: 'iberia_002.mp4',
+    source: 'iberia_002.mp4',
     videoTexts: [
       {
         text: `
@@ -158,7 +158,7 @@ Ojalá hayas disfrutado del viaje...
   {
     scene: 7,
     duration: 8,
-    videoSource: 'iberia_001.mp4',
+    source: 'iberia_001.mp4',
     videoTexts: [
       {
         text: `
@@ -180,7 +180,7 @@ utilizándolo en tus vuelos a __mostTraveledZones__.
   {
     scene: 8,
     duration: 8,
-    videoSource: 'iberia_002.mp4',
+    source: 'iberia_002.mp4',
     videoTexts: [
       {
         text: `
@@ -203,7 +203,7 @@ Esperamos que todo fuera de tu agrado.
   {
     scene: 9,
     duration: 8,
-    videoSource: 'iberia_001.mp4',
+    source: 'iberia_001.mp4',
     videoTexts: [
       {
         text: `
@@ -231,7 +231,7 @@ que puedes canjear por vuelos y otras experiencias.
   {
     scene: 10,
     duration: 8,
-    videoSource: 'iberia_002.mp4',
+    source: 'iberia_002.mp4',
     videoTexts: [
       {
         text: `
@@ -252,7 +252,7 @@ mientras recorres el mundo con nosotros...
   {
     scene: 11,
     duration: 8,
-    videoSource: 'iberia_001.mp4',
+    source: 'iberia_001.mp4',
     videoTexts: [
       {
         text: `

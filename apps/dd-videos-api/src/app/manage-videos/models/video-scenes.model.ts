@@ -7,7 +7,7 @@ export interface VideoScenesModel {
 export interface VideoScene {
   scene: number;
   duration: number;
-  videoSource: string;
+  source: string;
   videoTexts: VideoText[];
 }
 

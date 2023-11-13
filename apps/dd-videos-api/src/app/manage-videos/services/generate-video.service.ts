@@ -35,7 +35,6 @@ export class GenerateVideoService {
     this.projectId = projectId;
     this.totalTime += videoScene.duration;
 
-    const videoPath = videoScene.videoSource;
     const videoName = 'scene' + videoScene.scene.toString().padStart(2, '0');
     const DS = 1.0; // display start
     const DE = videoScene.duration - 1; // display end
@@ -50,7 +49,7 @@ export class GenerateVideoService {
     }
 
     return new Promise((resolve, reject) => {
-      const scene = ffmpeg(videoPath);
+      const scene = ffmpeg(videoScene.source);
 
       let i = 0;
       videoScene.videoTexts.forEach((videoText) => {
@@ -100,7 +99,11 @@ export class GenerateVideoService {
       // Remove audio
       scene.noAudio();
       // Video length in seconds
-      scene.duration(videoScene.duration);
+      if (!this.isVideo(videoScene.source)) {
+        scene.loop(videoScene.duration);
+      } else {
+        scene.duration(videoScene.duration);
+      }
       // Video resolution
       // scene.size('848x480');
       scene.size('1280x720');
@@ -130,54 +133,6 @@ export class GenerateVideoService {
         reject();
       });
     });
-  }
-
-  private videoFromImages(imageArray: string[]): void {
-    const imagePath = imageArray.shift();
-    const imageName = path.parse(imagePath).name;
-    const DS = 1.0; // display start
-    const DE = 5.0; // display end
-    const FID = 1.5; // fade in duration
-    const FOD = 3; // fade out duration
-
-    ffmpeg()
-      .input(imagePath)
-      .loop(10)
-      .fps(60)
-      .videoFilters([
-        {
-          filter: 'drawtext',
-          options: {
-            fontfile: `${__dirname}/assets/fonts/LEMONMILK-Regular.otf`,
-            text: 'CUSTOM TEXT',
-            fontsize: 24,
-            fontcolor_expr: `ffffff%{eif\\: clip(255*(1*between(t\\, ${DS} + ${FID}\\, ${DE} - ${FOD}) + ((t - ${DS})/${FID})*between(t\\, ${DS}\\, ${DS} + ${FID}) + (-(t - ${DE})/${FOD})*between(t\\, ${DE} - ${FOD}\\, ${DE}) )\\, 0\\, 255) \\: x\\: 2 }`,
-            // x: '(main_w/2-text_w/2)',
-            x: '100+(W/tw)*0.2*n',
-            y: 100,
-            // shadowcolor: 'black',
-            // shadowx: 2,
-            // shadowy: 2,
-          },
-        },
-      ])
-      .size('1024x768')
-      // Output file
-      .save(`${__dirname}/tmp/${imageName}.mp4`)
-      // The callback that is run when FFmpeg is finished
-      .on('end', () => {
-        this.logger.log(`${imageName}.mp4 created correctly`);
-
-        if (imageArray.length > 0) {
-          this.videoFromImages(imageArray);
-        } else {
-          // this.mergeVideos(tmpFolder);
-        }
-      })
-      // The callback that is run when FFmpeg encountered an error
-      .on('error', (error) => {
-        this.logger.error(error);
-      });
   }
 
   private async mergeVideos({
@@ -287,5 +242,24 @@ export class GenerateVideoService {
     if (!fs.existsSync(folder)) {
       fs.mkdirSync(folder, { recursive: true });
     }
+  }
+
+  private isVideo(sourcePath: string): boolean {
+    const extension = sourcePath.split('.').pop();
+    const videoExtensions = [
+      'mp4',
+      'mkv',
+      'flv',
+      'mov',
+      'wmv',
+      'avi',
+      'avchd',
+      'f4v',
+      'swf',
+      'webm',
+      'mts',
+    ];
+
+    return videoExtensions.includes(extension);
   }
 }
