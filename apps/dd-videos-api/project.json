@@ -16,7 +16,8 @@
         "tsConfig": "apps/dd-videos-api/tsconfig.app.json",
         "assets": ["apps/dd-videos-api/src/assets"],
         "isolatedConfig": true,
-        "webpackConfig": "apps/dd-videos-api/webpack.config.js"
+        "webpackConfig": "apps/dd-videos-api/webpack.config.js",
+        "sourceMap": false
       },
       "configurations": {
         "development": {},

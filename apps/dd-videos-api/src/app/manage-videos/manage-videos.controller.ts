@@ -12,7 +12,10 @@ import { ManageVideosService } from './services/manage-videos.service';
 import { MANAGE_VIDEOS_SERVICE_NAME } from './constants/manage-videos.constants';
 import { GenerateVideoService } from './services/generate-video.service';
 import { ResponseModel } from './models/response.model';
-import { CreationMode } from './models/creation-mode.enum';
+import config from '../config';
+import { UploadMode } from './models/upload-mode.enum';
+import { ManageUploadFiles } from './services/manage-upload-files.service';
+import { GetProcessedVideosModel } from './models/get-processed-videos.model';
 
 @Controller('ffmpeg')
 export class ManageVideosController {
@@ -24,32 +27,17 @@ export class ManageVideosController {
 
   /**
    * Executes the data driven creation
-   * @param projectId
-   * @param creationMode values: "only-missing" (default), "all". If "all" it will remove all generated videos and it will create them once again
-   * @returns
+   * @param {number} projectId
+   * @returns {ResponseModel}
    */
-  @Get('create/:projectId/:creationMode?')
-  async create(
-    @Param('projectId') projectId: number,
-    @Param('creationMode') creationMode: CreationMode
-  ): Promise<ResponseModel> {
+  @Get('create/:projectId')
+  async create(@Param('projectId') projectId: number): Promise<ResponseModel> {
     try {
-      creationMode =
-        creationMode === CreationMode.All
-          ? CreationMode.All
-          : CreationMode.OnlyMissing;
-
       // Remove tmp and videos processed folder
-      const videosFolder = `${__dirname}/video/project${projectId
-        .toString()
-        .padStart(2, '0')}`;
-      const tmpFolder = `${__dirname}/tmp/project${projectId
-        .toString()
-        .padStart(2, '0')}`;
+      const projectFolder = `project${projectId.toString().padStart(2, '0')}`;
+      const videosFolder = `${__dirname}/video/project${projectFolder}`;
+      const tmpFolder = `${__dirname}/tmp/project${projectFolder}`;
 
-      if (creationMode === CreationMode.All) {
-        await fs.promises.rm(videosFolder, { recursive: true, force: true });
-      }
       await fs.promises.rm(tmpFolder, { recursive: true, force: true });
 
       const scenesData = await this.manageVideosService.getVideoScenesData({
@@ -59,14 +47,10 @@ export class ManageVideosController {
       const { audioFile, scenes, fillInData } = scenesData;
 
       // Already created videos control
-      let processedVideos: string[];
-      try {
-        processedVideos = fs
-          .readdirSync(videosFolder)
-          .map((video) => video.replace('.mp4', ''));
-      } catch (error) {
-        processedVideos = [];
-      }
+      const processedVideos = await this.getProcessedVideos({
+        videosFolder,
+        projectFolder,
+      });
 
       await Promise.allSettled(
         fillInData.map(async (data) => {
@@ -89,5 +73,35 @@ export class ManageVideosController {
         HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
+  }
+
+  private async getProcessedVideos({
+    videosFolder,
+    projectFolder,
+  }: GetProcessedVideosModel): Promise<string[]> {
+    let processedVideos: string[];
+
+    switch (config.api.uploadMode) {
+      case UploadMode.S3:
+        processedVideos = (
+          await ManageUploadFiles.getBucketObjects({
+            bucketName: config.aws.s3.bucketName,
+            prefix: projectFolder,
+          })
+        ).map((video) =>
+          video.replace(`${projectFolder}/`, '').replace('.mp4', '')
+        );
+        break;
+      default:
+        try {
+          processedVideos = fs
+            .readdirSync(videosFolder)
+            .map((video) => video.replace('.mp4', ''));
+        } catch (error) {
+          processedVideos = [];
+        }
+    }
+
+    return processedVideos;
   }
 }

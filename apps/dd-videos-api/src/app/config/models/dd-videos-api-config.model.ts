@@ -5,5 +5,11 @@ export interface DDVideosApiConfigModel {
     version: string;
     prefix: string;
     envPrefix: string;
+    uploadMode: string;
+  };
+  aws: {
+    s3: {
+      bucketName: string;
+    };
   };
 }

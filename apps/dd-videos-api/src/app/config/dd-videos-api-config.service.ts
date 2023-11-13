@@ -19,6 +19,12 @@ export class DDVideosApiConfigService {
         version: process.env.API_VERSION || 'v1',
         prefix: process.env.API_PREFIX || '',
         envPrefix: process.env.ENV_PREFIX || '',
+        uploadMode: process.env.UPLOAD_MODE || '',
+      },
+      aws: {
+        s3: {
+          bucketName: process.env.S3_BUCKET,
+        },
       },
     };
   }

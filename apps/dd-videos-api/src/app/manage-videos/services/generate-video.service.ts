@@ -9,6 +9,9 @@ import { MergeVideosModel } from '../models/merge-videos.model';
 import { AddMusicTrackModel } from '../models/add-music-track.model';
 import { CreateFolderModel } from '../models/create-folder.model';
 import { TransformText } from '../models/transform-text.model';
+import { ManageUploadFiles } from './manage-upload-files.service';
+import config from '../../config';
+import { UploadMode } from '../models/upload-mode.enum';
 
 export class GenerateVideoService {
   private uuid: string;
@@ -240,11 +243,19 @@ export class GenerateVideoService {
           this.logger.error(`${this.uuid}: An error occurred: ${err.message}`);
           reject;
         })
-        .on('end', () => {
+        .on('end', async () => {
           // remove tmp folder
           fs.rmSync(tmpFolder, { recursive: true, force: true });
           this.logger.log(`${this.uuid}: Removed tmp folder - ${tmpFolder}`);
           this.logger.log(`${this.uuid}: Adding audio track completed`);
+
+          if (config.api.uploadMode === UploadMode.S3) {
+            await ManageUploadFiles.uploadToS3({
+              filePath: outputVideoFilePath,
+              objectKey: `${projectDir}/${this.uuid}.mp4`,
+              bucketName: config.aws.s3.bucketName,
+            });
+          }
           resolve();
         })
         .run();
