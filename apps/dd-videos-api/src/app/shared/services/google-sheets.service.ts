@@ -8,7 +8,7 @@ const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 
 export async function getAuthToken(): Promise<JSONClient | Compute> {
   const auth = new google.auth.GoogleAuth({
-    keyFile: 'credentials.json',
+    keyFile: __dirname + '/credentials.json',
     scopes: SCOPES,
   });
   const authToken = await auth.getClient();

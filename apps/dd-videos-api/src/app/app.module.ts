@@ -17,15 +17,14 @@ import config from './config';
       pinoHttp: {
         timestamp: pino.stdTimeFunctions.isoTime,
         level: config.loggerLevel || 'info',
-        transport:
-          process.env.ENV_PREFIX === 'dev'
-            ? {
-                target: 'pino-pretty',
-                options: {
-                  singleLine: true,
-                },
-              }
-            : undefined,
+        transport: config.development
+          ? {
+              target: 'pino-pretty',
+              options: {
+                singleLine: true,
+              },
+            }
+          : undefined,
         customProps: (req: Request) => {
           return {
             correlationId: req[CORRELATION_ID_HEADER],

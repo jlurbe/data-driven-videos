@@ -1,7 +1,5 @@
 import { Logger } from '@nestjs/common';
-import FfmpegStatic from 'ffmpeg-static';
 import ffmpeg from 'fluent-ffmpeg';
-import ffprobeInstaller from '@ffprobe-installer/ffprobe';
 import fs from 'node:fs';
 import { FormatVideoModel } from '../models/format-video.model';
 import { MergeVideosModel } from '../models/merge-videos.model';
@@ -11,16 +9,22 @@ import { TransformText } from '../models/transform-text.model';
 import { ManageUploadFiles } from './manage-upload-files.service';
 import config from '../../config';
 import { UploadMode } from '../models/upload-mode.enum';
+// FFMPEG FROM NODE. UNCOMMENT FOR ACTIVATE
+// if (config.api.ffmpegNodeSources) {
+//   import('ffmpeg-static').then((ffmpegStatic) => {
+//     ffmpeg.setFfmpegPath(ffmpegStatic.default);
+//   });
+//   import('@ffprobe-installer/ffprobe').then((ffprobeInstaller) => {
+//     ffmpeg.setFfprobePath(ffprobeInstaller.path);
+//   });
+// }
 
 export class GenerateVideoService {
   private uuid: string;
   private projectId: number;
   private totalTime = 0;
 
-  constructor(private readonly logger: Logger) {
-    ffmpeg.setFfmpegPath(FfmpegStatic);
-    ffmpeg.setFfprobePath(ffprobeInstaller.path);
-  }
+  constructor(private readonly logger: Logger) {}
 
   async formatVideo({
     videoScenes,

@@ -38,7 +38,7 @@ export class ManageVideosGsheetsRepository implements ManageVideosRepository {
       sheetName: 'projects',
     })) as ProjectsModel;
     const selectedProject = projectsData.find(
-      (project) => project.id === projectId
+      (project) => Number(project.id) === Number(projectId)
     );
 
     if (!selectedProject) {

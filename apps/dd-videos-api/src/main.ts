@@ -1,23 +1,20 @@
-/**
- * This is not a production server yet!
- * This is only a minimal backend to get started.
- */
+import serverlessExpress from '@vendia/serverless-express';
+import { Context, Handler } from 'aws-lambda';
+import { bootstrap } from './app';
 
-import { Logger } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app/app.module';
-import { Logger as PinoLogger } from 'nestjs-pino';
+let cachedServer: Handler;
 
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  const globalPrefix = 'api';
-  app.setGlobalPrefix(globalPrefix);
-  app.useLogger(app.get(PinoLogger));
-  const port = process.env.PORT || 3000;
-  await app.listen(port);
-  Logger.log(
-    `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`
-  );
+async function bootstrapLambda() {
+  if (!cachedServer) {
+    const expressApp = await bootstrap();
+    cachedServer = serverlessExpress({
+      app: expressApp.getHttpAdapter().getInstance(),
+    });
+  }
+  return cachedServer;
 }
 
-bootstrap();
+export const handler = async (event: any, context: Context, callback: any) => {
+  const server = await bootstrapLambda();
+  return server(event, context, callback);
+};

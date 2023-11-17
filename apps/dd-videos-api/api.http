@@ -1,2 +1,10 @@
-# Create a new video
-GET http://localhost:3000/api/ffmpeg/create
+### Create a new video
+POST http://localhost:3000/ffmpeg/create
+Content-Type: application/json
+
+{
+  "projectId": 2
+}
+
+#### Test endpoint
+GET http://localhost:3000/ffmpeg/test

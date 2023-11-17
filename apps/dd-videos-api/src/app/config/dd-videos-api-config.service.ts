@@ -14,12 +14,10 @@ export class DDVideosApiConfigService {
   constructor() {
     this.config = {
       development: Boolean(process.env.DEVELOPMENT),
-      loggerLevel: process.env.LOG_LEVEL,
+      loggerLevel: process.env.LOG_LEVEL || 'info',
       api: {
-        version: process.env.API_VERSION || 'v1',
-        prefix: process.env.API_PREFIX || '',
-        envPrefix: process.env.ENV_PREFIX || '',
         uploadMode: process.env.UPLOAD_MODE || '',
+        ffmpegNodeSources: process.env.FFMPEG_NODE_SOURCES === 'true',
         spreadsheetId: process.env.SPREADSHEET_ID,
       },
       aws: {

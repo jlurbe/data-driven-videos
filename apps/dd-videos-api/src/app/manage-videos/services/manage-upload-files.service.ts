@@ -52,6 +52,8 @@ export class ManageUploadFiles {
       const { Contents, IsTruncated, NextContinuationToken } =
         await s3Client.send(command);
 
+      if (!Contents) break;
+
       Contents.map((content) => {
         contents.push(content.Key);
       });

@@ -14,28 +14,61 @@
         "outputPath": "dist/apps/dd-videos-api",
         "main": "apps/dd-videos-api/src/main.ts",
         "tsConfig": "apps/dd-videos-api/tsconfig.app.json",
-        "assets": ["apps/dd-videos-api/src/assets"],
-        "isolatedConfig": true,
+        "assets": [
+          "apps/dd-videos-api/src/assets",
+          "apps/dd-videos-api/src/credentials.json"
+        ],
+        "webpackConfig": "apps/dd-videos-api/webpack.config.js",
+        "sourceMap": false,
+        "externalDependencies": ["@aws-sdk/client-s3"]
+      },
+      "configurations": {
+        "development": {},
+        "production": {
+          "optimization": true,
+          "extractLicenses": false,
+          "inspect": false
+        }
+      }
+    },
+    "build-local": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/dd-videos-api-local",
+        "main": "apps/dd-videos-api/src/local.ts",
+        "tsConfig": "apps/dd-videos-api/tsconfig.app.json",
+        "assets": [
+          "apps/dd-videos-api/src/assets",
+          "apps/dd-videos-api/src/credentials.json"
+        ],
         "webpackConfig": "apps/dd-videos-api/webpack.config.js",
         "sourceMap": false
       },
       "configurations": {
         "development": {},
-        "production": {}
+        "production": {
+          "optimization": true,
+          "extractLicenses": false,
+          "inspect": false
+        }
       }
     },
     "serve": {
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "dd-videos-api:build"
+        "buildTarget": "dd-videos-api:build-local"
       },
       "configurations": {
         "development": {
-          "buildTarget": "dd-videos-api:build:development"
+          "buildTarget": "dd-videos-api:build-local:development"
         },
         "production": {
-          "buildTarget": "dd-videos-api:build:production"
+          "buildTarget": "dd-videos-api:build-local:production"
         }
       }
     },
