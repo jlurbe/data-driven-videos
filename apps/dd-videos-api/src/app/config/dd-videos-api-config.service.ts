@@ -19,6 +19,7 @@ export class DDVideosApiConfigService {
         uploadMode: process.env.UPLOAD_MODE || '',
         ffmpegNodeSources: process.env.FFMPEG_NODE_SOURCES === 'true',
         spreadsheetId: process.env.SPREADSHEET_ID,
+        tmpPath: process.env.TMP_PATH,
       },
       aws: {
         s3: {

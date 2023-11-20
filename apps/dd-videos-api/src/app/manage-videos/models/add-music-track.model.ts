@@ -1,5 +1,4 @@
 export interface AddMusicTrackModel {
-  inputVideoFilePath: string;
-  inputAudioFilePath: string;
+  audioFile: string;
   tmpFolder: string;
 }

@@ -47,7 +47,7 @@ export class GenerateVideoService {
     // Create tmp directory
     const projectDir = `project${projectId.toString().padStart(2, '0')}`;
     if (!tmpFolder) {
-      tmpFolder = `${__dirname}/tmp/${projectDir}/${this.uuid}`;
+      tmpFolder = `${config.api.tmpPath}/${projectDir}/tmp/${this.uuid}`;
       await this.createFolder({ folder: `${tmpFolder}/txt` });
     }
 
@@ -143,7 +143,6 @@ export class GenerateVideoService {
     audioFile,
   }: MergeVideosModel): Promise<void> {
     const inputVideoFilePath = `${tmpFolder}/${this.uuid}.mp4`;
-    const inputAudioFilePath = audioFile;
 
     return new Promise((resolve, reject) => {
       const mergedVideo = ffmpeg();
@@ -168,8 +167,7 @@ export class GenerateVideoService {
           // Add audio track
           resolve(
             this.addMusicTrack({
-              inputVideoFilePath,
-              inputAudioFilePath,
+              audioFile,
               tmpFolder,
             })
           );
@@ -179,18 +177,18 @@ export class GenerateVideoService {
   }
 
   private async addMusicTrack({
-    inputVideoFilePath,
-    inputAudioFilePath,
+    audioFile,
     tmpFolder,
   }: AddMusicTrackModel): Promise<void> {
     const projectDir = `project${this.projectId.toString().padStart(2, '0')}`;
-    const projectPath = `${__dirname}/video/${projectDir}`;
-    const outputVideoFilePath = `${__dirname}/video/${projectDir}/${this.uuid}.mp4`;
+    const inputVideoFilePath = `${tmpFolder}/${this.uuid}.mp4`;
+    const projectPath = `${config.api.tmpPath}/${projectDir}/processed`;
+    const outputVideoFilePath = `${projectPath}/${this.uuid}.mp4`;
     await this.createFolder({ folder: projectPath });
 
     return new Promise((resolve, reject) => {
       ffmpeg(inputVideoFilePath)
-        .input(inputAudioFilePath)
+        .input(audioFile)
         .audioFilters([`afade=t=out:st=${this.totalTime - 5}:d=5`])
         .output(outputVideoFilePath)
         .outputOptions(['-map 0:v', '-map 1:a', '-c:v copy', '-shortest'])

@@ -5,6 +5,7 @@ export interface DDVideosApiConfigModel {
     uploadMode: string;
     ffmpegNodeSources: boolean;
     spreadsheetId: string;
+    tmpPath: string;
   };
   aws: {
     s3: {

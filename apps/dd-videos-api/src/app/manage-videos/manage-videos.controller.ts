@@ -37,8 +37,8 @@ export class ManageVideosController {
     this.logger.log('projectId', projectId);
     try {
       const projectFolder = `project${projectId.toString().padStart(2, '0')}`;
-      const videosFolder = `${__dirname}/video/${projectFolder}`;
-      const tmpFolder = `${__dirname}/tmp/${projectFolder}`;
+      const videosFolder = `${config.api.tmpPath}/${projectFolder}/processed`;
+      const tmpFolder = `${config.api.tmpPath}/${projectFolder}/tmp`;
 
       // Remove tmp and videos processed folder
       await fs.promises.rm(tmpFolder, { recursive: true, force: true });
@@ -94,8 +94,8 @@ export class ManageVideosController {
   ): Promise<ResponseModel> {
     try {
       const projectFolder = `project${projectId.toString().padStart(2, '0')}`;
-      const videosFolder = `${__dirname}/video/${projectFolder}`;
-      const tmpFolder = `${__dirname}/tmp/${projectFolder}`;
+      const videosFolder = `${config.api.tmpPath}/${projectFolder}/processed`;
+      const tmpFolder = `${config.api.tmpPath}/${projectFolder}/tmp`;
 
       // Remove tmp and videos processed folder
       await fs.promises.rm(tmpFolder, { recursive: true, force: true });
@@ -112,6 +112,7 @@ export class ManageVideosController {
         projectFolder,
       });
 
+      console.log('processedVideos', processedVideos);
       await Promise.allSettled(
         fillInData.map(async (data) => {
           if (!processedVideos.includes(data.uuid)) {
