@@ -112,7 +112,6 @@ export class ManageVideosController {
         projectFolder,
       });
 
-      console.log('processedVideos', processedVideos);
       await Promise.allSettled(
         fillInData.map(async (data) => {
           if (!processedVideos.includes(data.uuid)) {
