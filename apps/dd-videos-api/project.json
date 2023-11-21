@@ -45,7 +45,7 @@
           "apps/dd-videos-api/src/assets",
           "apps/dd-videos-api/src/credentials.json"
         ],
-        "webpackConfig": "apps/dd-videos-api/webpack.config.js",
+        "webpackConfig": "apps/dd-videos-api/webpack.local.config.js",
         "sourceMap": false
       },
       "configurations": {
