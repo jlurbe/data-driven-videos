@@ -47,3 +47,6 @@ logs
 
 # Google APIs credentials
 credentials.json
+
+# Angulars
+.angular
