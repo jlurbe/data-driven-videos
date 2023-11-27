@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthGoogleService } from '../auth-google.service';
 
 @Component({
   selector: 'app-login',
@@ -6,5 +7,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
-  login() {}
+  constructor(private authGoogleService: AuthGoogleService) {
+    this.authGoogleService.initLogin();
+  }
+
+  login() {
+    this.authGoogleService.login();
+  }
 }

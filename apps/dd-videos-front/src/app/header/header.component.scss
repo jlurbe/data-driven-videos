@@ -43,39 +43,6 @@
       -webkit-mask-repeat: no-repeat;
       font-size: 0px;
     }
-
-    // .hamburger-lines {
-    //   display: block;
-    //   height: 22px;
-    //   width: 15px;
-    //   z-index: 10;
-    //   display: flex;
-    //   flex-direction: column;
-    //   justify-content: space-between;
-    //   cursor: url('../../assets/img/pink_pointer.png') 12 2, pointer;
-
-    //   .line {
-    //     display: block;
-    //     height: 2px;
-    //     width: 100%;
-    //     border-radius: 10px;
-    //     background: #0e2431;
-    //   }
-
-    //   .line1 {
-    //     transform-origin: 0% 0%;
-    //     transition: transform 0.4s ease-in-out;
-    //   }
-
-    //   .line2 {
-    //     transition: transform 0.2s ease-in-out;
-    //   }
-
-    //   .line3 {
-    //     transform-origin: 0% 100%;
-    //     transition: transform 0.4s ease-in-out;
-    //   }
-    // }
   }
 }
 
@@ -144,9 +111,7 @@
   }
 
   .navigation__link .nav-cont {
-    /* transform: translateY(-50%); */
     transition: 0.2s all ease;
-    /* cursor: pointer; */
     position: relative;
   }
 
