@@ -1,9 +1,21 @@
-<section class="login-section">
+<section class="login-section" *ngIf="!isLoggedIn">
+  <p class="wrapper">Get your Christmas video. First login.</p>
+  <p class="wrapper">
+    <app-google-signin
+      (loginWithGoogle)="googleSignin($event)"
+    ></app-google-signin>
+  </p>
+</section>
+<section class="video-section" *ngIf="isLoggedIn">
   <p class="wrapper">Get your Christmas video.</p>
   <button class="btn btn-google" (click)="logout()">
     <div class="g-icon">
       <img src="https://img.icons8.com/color/22/000000/google-logo.png" />
     </div>
-    <span class="g-text g-sign"> Sign out from Google </span>
+    <span class="g-text g-sign">Sign out from Google</span>
   </button>
+  <video controls>
+    <source [src]="videoUrl" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
 </section>
