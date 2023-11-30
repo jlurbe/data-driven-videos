@@ -37,7 +37,8 @@ import { GoogleSigninComponent } from './google-signin/google-signin.component';
           {
             id: GoogleLoginProvider.PROVIDER_ID,
             provider: new GoogleLoginProvider(
-              process.env['NX_GOOGLE_CLIENT_ID'] ?? ''
+              process.env['NX_GOOGLE_CLIENT_ID'] ?? '',
+              { oneTapEnabled: false }
             ),
           },
         ],

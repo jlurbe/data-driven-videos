@@ -1,4 +1,4 @@
-<section class="login-section" *ngIf="!isLoggedIn">
+<section class="login-section" *ngIf="!user">
   <p class="wrapper">Get your Christmas video. First login.</p>
   <p class="wrapper">
     <app-google-signin
@@ -6,7 +6,7 @@
     ></app-google-signin>
   </p>
 </section>
-<section class="video-section" *ngIf="isLoggedIn">
+<section class="video-section" *ngIf="user">
   <p class="wrapper">Get your Christmas video.</p>
   <button class="btn btn-google" (click)="logout()">
     <div class="g-icon">
