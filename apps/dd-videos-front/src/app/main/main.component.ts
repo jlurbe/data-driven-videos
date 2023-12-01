@@ -3,20 +3,21 @@ import { SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-main',
+  selector: 'dd-videos-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss'],
 })
 export class MainComponent implements OnInit, OnDestroy {
   authSubscription!: Subscription;
   user: SocialUser | undefined;
-  videoUrl: string | null;
+  videoUrl: string;
 
   constructor(private authService: SocialAuthService) {
     // Get from local strorage
     const user = localStorage.getItem('user');
+    const videoUrl = localStorage.getItem('videoUrl');
     this.user = user ? JSON.parse(user) : undefined;
-    this.videoUrl = localStorage.getItem('videoUrl');
+    this.videoUrl = videoUrl ? videoUrl : '';
   }
 
   ngOnInit(): void {
@@ -40,9 +41,9 @@ export class MainComponent implements OnInit, OnDestroy {
     localStorage.removeItem('videoUrl');
 
     this.user = undefined;
-    this.videoUrl = null;
+    this.videoUrl = '';
 
-    this.authService.signOut().catch((err) => {});
+    this.authService.signOut().catch(() => {});
   }
 
   googleSignin(googleWrapper: any) {

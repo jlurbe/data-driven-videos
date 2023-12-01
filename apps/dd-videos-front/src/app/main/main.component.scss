@@ -50,3 +50,23 @@
     }
   }
 }
+
+.share-buttons a {
+  @apply w-16 h-16 transition-all bg-contain;
+
+  &.linkedin {
+    @apply bg-[url('../../assets/img/social/linkedin_white.png')] hover:bg-[url('../../assets/img/social/linkedin_black.png')];
+  }
+
+  &.facebook {
+    @apply bg-[url('../../assets/img/social/facebook_white.png')] hover:bg-[url('../../assets/img/social/facebook_black.png')];
+  }
+
+  &.twitter {
+    @apply bg-[url('../../assets/img/social/twitter_white.png')] hover:bg-[url('../../assets/img/social/twitter_black.png')];
+  }
+
+  &.whatsapp {
+    @apply bg-[url('../../assets/img/social/whatsapp_white.png')] hover:bg-[url('../../assets/img/social/whatsapp_black.png')];
+  }
+}

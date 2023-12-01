@@ -31,7 +31,7 @@ html {
   font-size: 62.5%;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  cursor: url('./assets/img/pink_mouse.png') 10 10, default;
+  cursor: url('./assets/img/cursor/pink_mouse.png') 10 10, default;
 }
 
 body.menu-open {
@@ -42,7 +42,7 @@ a,
 button:hover,
 li.follow-us__link,
 .button:hover {
-  cursor: url('./assets/img/pink_pointer.png') 12 2, default;
+  cursor: url('./assets/img/cursor/pink_pointer.png') 12 2, default;
 }
 
 .link-hover {
