@@ -1,0 +1,252 @@
+/* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-black: #000;
+  --color-brand-black: #282828;
+  --color-brand-secondary-black: #222222;
+  --color-brand-white: #ffffff;
+
+  --color-text-white: #ffffff;
+
+  --color-background-black: #282828;
+  --color-background-garaje: #f5f5f5;
+  --color-garaje-pink: #f1afd0;
+  --easeOutExpo: cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: inherit;
+  box-sizing: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  font-size: 62.5%;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  cursor: url('./assets/img/cursor/pink_mouse.png') 10 10, default;
+}
+
+body.menu-open {
+  overflow: hidden;
+}
+
+a,
+button:hover,
+li.follow-us__link,
+.button:hover {
+  cursor: url('./assets/img/cursor/pink_pointer.png') 12 2, default;
+}
+
+.link-hover {
+  position: relative;
+  display: inline-block;
+}
+.link-hover::after {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  content: '';
+  width: 100%;
+  height: 1px;
+  background: var(--color-brand-secondary-black);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 1s var(--easeOutExpo);
+}
+.link-hover:hover:after {
+  transform-origin: left;
+  transform: scaleX(1);
+}
+
+@font-face {
+  font-family: 'Garaje Symbols';
+  src: url('./assets/fonts/Garaje-Symbols.otf');
+  font-weight: bold;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Garaje Bold';
+  src: url('./assets/fonts/Garaje-Bold.otf');
+  font-weight: bold;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IBM Plex Mono';
+  src: url('./assets/fonts/IBMPlexMono-Regular.ttf');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.garaje-symbols {
+  font-family: 'Garaje Symbols';
+}
+
+.garaje-typo {
+  font-family: 'Garaje Bold';
+}
+
+.body-small {
+  font-family: 'IBM Plex Mono';
+  font-size: 13px;
+  line-height: 24px;
+}
+
+.text-large {
+  font-family: 'IBM Plex Mono';
+  font-size: 16px;
+  line-height: 28px;
+}
+
+.wrapper {
+  max-width: 1440px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+}
+
+.header_heading01 {
+  font-family: 'Garaje Bold';
+  font-size: 40px;
+  line-height: 56px;
+  letter-spacing: -0.02em;
+  color: var(--color-text-black);
+}
+.header_heading03 {
+  font-family: 'Garaje Bold';
+  font-size: 32px;
+  line-height: 40px;
+  letter-spacing: -0.01em;
+  color: var(--color-text-black);
+}
+
+.header_heading04 {
+  font-family: 'Garaje Bold';
+  font-size: 24px;
+  line-height: 32px;
+  color: var(--color-text-black);
+}
+
+.menu-btn__burger {
+  width: 15px;
+  height: 2px;
+  background: #000;
+  transition: all 0.2s ease-in-out;
+}
+.menu-btn__burger::before,
+.menu-btn__burger::after {
+  content: '';
+  position: absolute;
+  width: 15px;
+  height: 2px;
+  background: #000;
+  transition: all 0.2s ease-in-out;
+}
+.menu-btn__burger::before {
+  transform: translateY(-10px);
+}
+.menu-btn__burger::after {
+  transform: translateY(10px);
+}
+
+.header--full nav {
+  border-color: var(--color-brand-white);
+}
+.header--full .navbar button {
+  background-color: var(--color-brand-white) !important;
+}
+.header--full .menu-btn__burger,
+.header--full .menu-btn__burger::before,
+.header--full .menu-btn__burger::after {
+  background: #fff;
+}
+.header--full .menu-btn__burger {
+  transform: translateX(-50px);
+  background: transparent;
+}
+.header--full .menu-btn__burger::before {
+  width: 30px;
+  transform: rotate(45deg) translate(25px, -25px);
+  background: #fff;
+}
+.header--full .menu-btn__burger::after {
+  width: 30px;
+  transform: rotate(-45deg) translate(25px, 25px);
+  background: #fff;
+}
+header.header--full .menu-content {
+  position: absolute;
+  height: 100vh;
+  top: 0;
+  z-index: 20;
+  background-color: var(--color-brand-black);
+  color: var(--color-text-white);
+  transform: scale3d(1, 1, 1);
+}
+
+@media (min-width: 320px) {
+  header.header--full .nav {
+    position: relative;
+    background-color: var(--color-brand-black);
+    border-color: var(--color-brand-white);
+    border-top: 1px solid #ffffff !important;
+    border-bottom: 2px solid #ffffff !important;
+  }
+
+  .header--full {
+    background-color: var(--color-background-black) !important;
+
+    .menu-content {
+      position: absolute;
+      height: 100vh;
+      top: 0;
+      z-index: 100;
+      background-color: var(--color-brand-black);
+      color: var(--color-text-white);
+      transform: scale3d(1, 1, 1);
+    }
+  }
+}
+
+@media (min-width: 1023px) {
+  .header_heading01 {
+    font-size: 56px;
+    line-height: 72px;
+    letter-spacing: -0.02em;
+  }
+  .header_heading03 {
+    font-size: 32px;
+    line-height: 40px;
+    letter-spacing: -0.01em;
+  }
+  .header_heading04 {
+    font-size: 24px;
+    line-height: 32px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .header_heading01 {
+    font-size: 72px;
+    line-height: 104px;
+    letter-spacing: -0.02em;
+  }
+  .header_heading03 {
+    font-size: 32px;
+    line-height: 40px;
+    letter-spacing: -0.01em;
+  }
+  .header_heading04 {
+    font-size: 24px;
+    line-height: 32px;
+  }
+}

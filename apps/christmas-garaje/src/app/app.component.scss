@@ -1,0 +1,45 @@
+.container {
+  display: grid;
+  grid-template-columns: 1fr minmax(1fr, 1440px) 1fr;
+  grid-template-rows: 1fr max-content 1fr;
+  min-height: 100vh;
+  min-height: 100dvh;
+  min-width: 100%;
+  grid-template-areas:
+    'header header header'
+    'main main main'
+    'footer footer footer';
+  background-color: var(--color-background-garaje);
+  grid-template-rows: auto 1fr auto;
+
+  header {
+    grid-area: header;
+    position: sticky;
+    z-index: 40;
+    top: 0;
+    width: 100vw;
+    transition: 0.2s all ease-out;
+    background-color: var(--color-background-garaje);
+
+    &.header--hidden {
+      transform: translate3d(0, -100%, 0);
+    }
+  }
+
+  main {
+    grid-area: main;
+  }
+
+  footer {
+    grid-area: footer;
+  }
+}
+
+@media (min-width: 1440px) {
+  .container {
+    grid-template-areas:
+      '. header .'
+      '. main .'
+      '. footer .';
+  }
+}

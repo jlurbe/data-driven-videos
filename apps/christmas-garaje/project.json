@@ -1,0 +1,98 @@
+{
+  "name": "christmas-garaje",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "dd-videos",
+  "sourceRoot": "apps/christmas-garaje/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:webpack-browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/christmas-garaje",
+        "index": "apps/christmas-garaje/src/index.html",
+        "main": "apps/christmas-garaje/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/christmas-garaje/tsconfig.app.json",
+        "assets": [
+          "apps/christmas-garaje/src/favicon.ico",
+          "apps/christmas-garaje/src/assets"
+        ],
+        "styles": ["apps/christmas-garaje/src/styles.scss"],
+        "scripts": [],
+        "customWebpackConfig": {
+          "path": "apps/christmas-garaje/webpack.config.js"
+        }
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": false,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@nx/angular:webpack-dev-server",
+      "configurations": {
+        "production": {
+          "browserTarget": "christmas-garaje:build:production"
+        },
+        "development": {
+          "browserTarget": "christmas-garaje:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "browserTarget": "christmas-garaje:build"
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "apps/christmas-garaje/**/*.ts",
+          "apps/christmas-garaje/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/christmas-garaje/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    }
+  }
+}
