@@ -34,7 +34,6 @@
     "build-local": {
       "executor": "@nx/webpack:webpack",
       "outputs": ["{options.outputPath}"],
-      "defaultConfiguration": "production",
       "options": {
         "target": "node",
         "compiler": "tsc",
@@ -45,11 +44,9 @@
           "apps/dd-videos-api/src/assets",
           "apps/dd-videos-api/src/credentials.json"
         ],
-        "webpackConfig": "apps/dd-videos-api/webpack.local.config.js",
-        "sourceMap": false
+        "webpackConfig": "apps/dd-videos-api/webpack.local.config.js"
       },
       "configurations": {
-        "development": {},
         "production": {
           "optimization": true,
           "extractLicenses": false,
@@ -62,14 +59,6 @@
       "defaultConfiguration": "development",
       "options": {
         "buildTarget": "dd-videos-api:build-local"
-      },
-      "configurations": {
-        "development": {
-          "buildTarget": "dd-videos-api:build-local:development"
-        },
-        "production": {
-          "buildTarget": "dd-videos-api:build-local:production"
-        }
       }
     },
     "lint": {
