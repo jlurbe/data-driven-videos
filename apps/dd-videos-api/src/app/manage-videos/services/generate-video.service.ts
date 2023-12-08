@@ -9,6 +9,7 @@ import { TransformText } from '../models/transform-text.model';
 import { ManageUploadFiles } from './manage-upload-files.service';
 import config from '../../config';
 import { UploadMode } from '../models/upload-mode.enum';
+import { VIDEO_DEFAULTS } from '../constants/video-defaults.contants';
 // FFMPEG FROM NODE. UNCOMMENT FOR ACTIVATE
 // if (config.api.ffmpegNodeSources) {
 //   import('ffmpeg-static').then((ffmpegStatic) => {
@@ -39,10 +40,6 @@ export class GenerateVideoService {
     this.totalTime += videoScene.duration;
 
     const videoName = 'scene' + videoScene.scene.toString().padStart(2, '0');
-    const DS = 1.0; // display start
-    const DE = videoScene.duration - 1; // display end
-    const FID = 1.5; // fade in duration
-    const FOD = 1.5; // fade out duration
 
     // Create tmp directory
     const projectDir = `project${projectId.toString().padStart(2, '0')}`;
@@ -53,13 +50,26 @@ export class GenerateVideoService {
 
     return new Promise((resolve, reject) => {
       const scene = ffmpeg(videoScene.source);
+      const FID = VIDEO_DEFAULTS.TEXT_FADE_IN_DURATION; // fade in duration
+      const FOD = VIDEO_DEFAULTS.TEXT_FADE_OUT_DURATION; // fade out duration
 
       let i = 0;
       videoScene.videoTexts.forEach((videoText) => {
+        const color = videoText.color || VIDEO_DEFAULTS.TEXT_COLOR;
+        const DS =
+          videoText?.time?.start || VIDEO_DEFAULTS.TEXT_DISPLAY_IN_TIME; // display start
+        const DE =
+          videoText?.time?.end ||
+          videoScene.duration - VIDEO_DEFAULTS.TEXT_DISPLAY_OUT_TIME; // display end
+
         const fontfile =
           videoText.style === 'regular'
-            ? `${__dirname}/assets/fonts/Nexa-ExtraLight.ttf`
-            : `${__dirname}/assets/fonts/Nexa-Heavy.ttf`;
+            ? `${__dirname}/assets/fonts/${
+                videoScene.regularFont || VIDEO_DEFAULTS.REGULAR_FONT
+              }`
+            : `${__dirname}/assets/fonts/${
+                videoScene.boldFont || VIDEO_DEFAULTS.BOLD_FONT
+              }`;
 
         // Create file with text to display
         // Needed to avoid the special characters issue in drawtext
@@ -78,9 +88,10 @@ export class GenerateVideoService {
             options: {
               fontfile,
               textfile,
-              fontsize: 25,
-              line_spacing: 5,
-              fontcolor_expr: `ffffff%{eif\\: clip(255*(1*between(t\\, ${DS} + ${FID}\\, ${DE} - ${FOD}) + ((t - ${DS})/${FID})*between(t\\, ${DS}\\, ${DS} + ${FID}) + (-(t - ${DE})/${FOD})*between(t\\, ${DE} - ${FOD}\\, ${DE}) )\\, 0\\, 255) \\: x\\: 2 }`,
+              fontsize: videoText.size || VIDEO_DEFAULTS.TEXT_SIZE,
+              line_spacing: VIDEO_DEFAULTS.TEXT_LINE_SPACING,
+              fontcolor: color,
+              alpha: `min(max(0, (t - ${DS}) / ${FID}), max(0, (${DE} - t) / ${FOD}))`,
               // x: '(main_w/2-text_w/2)',
               // x: '100+(W/tw)*0.2*n',
               x: videoText.position.x,
@@ -91,11 +102,13 @@ export class GenerateVideoService {
       });
       // Video transition
       scene.videoFilters([
-        'fade=in:st=0:d=1',
-        `fade=out:st=${videoScene.duration - 1}:d=1`,
+        `fade=in:st=0:d=${VIDEO_DEFAULTS.SCENE_FADE_IN}`,
+        `fade=out:st=${videoScene.duration - VIDEO_DEFAULTS.SCENE_FADE_OUT}:d=${
+          VIDEO_DEFAULTS.SCENE_FADE_OUT
+        }`,
       ]);
       // Set fps
-      scene.fpsOutput(30);
+      scene.fpsOutput(videoScene.fps || VIDEO_DEFAULTS.FPS);
       // Set codec
       scene.videoCodec('libx265');
       scene.addOptions(['-crf 28']);
@@ -108,8 +121,7 @@ export class GenerateVideoService {
         scene.duration(videoScene.duration);
       }
       // Video resolution
-      // scene.size('848x480');
-      scene.size('1280x720');
+      scene.size(videoScene.resolution);
       // Output file
       scene.save(`${tmpFolder}/${videoName}.mp4`);
       // The callback that is run when FFmpeg is finished
@@ -187,9 +199,15 @@ export class GenerateVideoService {
     await this.createFolder({ folder: projectPath });
 
     return new Promise((resolve, reject) => {
+      const fadeOutStartTime =
+        this.totalTime - VIDEO_DEFAULTS.MUSIC_FADE_OUT_TIME;
       ffmpeg(inputVideoFilePath)
         .input(audioFile)
-        .audioFilters([`afade=t=out:st=${this.totalTime - 5}:d=5`])
+        .audioFilters([
+          `afade=t=out:st=${fadeOutStartTime > 0 ? fadeOutStartTime : 0}:d=${
+            VIDEO_DEFAULTS.MUSIC_FADE_OUT_TIME
+          }`,
+        ])
         .output(outputVideoFilePath)
         .outputOptions(['-map 0:v', '-map 1:a', '-c:v copy', '-shortest'])
         .on('start', () => {

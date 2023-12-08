@@ -80,7 +80,11 @@ export class ManageVideosGsheetsRepository implements ManageVideosRepository {
       audioFile: selectedProject.audioFile,
       scenes: await ManageVideosMapper.mapScenes(
         selectedScenes,
-        selectedTextScenes
+        selectedTextScenes,
+        selectedProject.regularFont,
+        selectedProject.boldFont,
+        selectedProject.resolution,
+        selectedProject.fps
       ),
       fillInData,
     };

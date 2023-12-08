@@ -6,6 +6,10 @@ export const videoScenes: VideoScene[] = [
     scene: 1,
     duration: 8,
     source: 'iberia_001.mp4',
+    resolution: '1280x720',
+    fps: 30,
+    regularFont: 'Nexa-ExtraLight.ttf',
+    boldFont: 'Nexa-Heavy.ttf',
     videoTexts: [
       {
         text: `
@@ -13,6 +17,8 @@ export const videoScenes: VideoScene[] = [
     `,
         style: VideoStyle.Bold,
         position: { x: '125', y: '90' },
+        size: 25,
+        color: 'ffffff',
       },
       {
         text: `    
@@ -22,6 +28,8 @@ Te damos la bienvenida a tu historia con Iberia.
     `,
         style: VideoStyle.Regular,
         position: { x: '125', y: '150' },
+        size: 25,
+        color: 'ffffff',
       },
     ],
   },
@@ -29,6 +37,10 @@ Te damos la bienvenida a tu historia con Iberia.
     scene: 2,
     duration: 8,
     source: 'iberia_002.mp4',
+    resolution: '1280x720',
+    fps: 30,
+    regularFont: 'Nexa-ExtraLight.ttf',
+    boldFont: 'Nexa-Heavy.ttf',
     videoTexts: [
       {
         text: `
@@ -37,6 +49,8 @@ con un vuelo __firstFlightFrom__-__firstFlightTo__ en clase __firstFlightClass__
 `,
         style: VideoStyle.Regular,
         position: { x: '125', y: '90' },
+        size: 25,
+        color: 'ffffff',
       },
       {
         text: ` 
@@ -45,6 +59,8 @@ _up_firstFlightClass_up_
 `,
         style: VideoStyle.Bold,
         position: { x: '125', y: '180' },
+        size: 25,
+        color: 'ffffff',
       },
     ],
   },
@@ -52,6 +68,10 @@ _up_firstFlightClass_up_
     scene: 3,
     duration: 8,
     source: 'iberia_001.mp4',
+    resolution: '1280x720',
+    fps: 30,
+    regularFont: 'Nexa-ExtraLight.ttf',
+    boldFont: 'Nexa-Heavy.ttf',
     videoTexts: [
       {
         text: `
@@ -60,6 +80,8 @@ Entre ellos, tus favoritos han sido:
 `,
         style: VideoStyle.Regular,
         position: { x: '125', y: '90' },
+        size: 25,
+        color: 'ffffff',
       },
       {
         text: ` 
@@ -67,6 +89,8 @@ __favouriteDestinations__.
 `,
         style: VideoStyle.Bold,
         position: { x: '125', y: '180' },
+        size: 25,
+        color: 'ffffff',
       },
     ],
   },
@@ -74,6 +98,10 @@ __favouriteDestinations__.
     scene: 4,
     duration: 8,
     source: 'iberia_002.mp4',
+    resolution: '1280x720',
+    fps: 30,
+    regularFont: 'Nexa-ExtraLight.ttf',
+    boldFont: 'Nexa-Heavy.ttf',
     videoTexts: [
       {
         text: `
@@ -81,6 +109,8 @@ Has visitado un total de
 `,
         style: VideoStyle.Regular,
         position: { x: '125', y: '90' },
+        size: 25,
+        color: 'ffffff',
       },
       {
         text: ` 
@@ -88,6 +118,8 @@ __visitedCountries__ países
 `,
         style: VideoStyle.Bold,
         position: { x: '125', y: '150' },
+        size: 25,
+        color: 'ffffff',
       },
       {
         text: `
@@ -95,6 +127,8 @@ __visitedCountries__ países
 `,
         style: VideoStyle.Regular,
         position: { x: '125', y: '210' },
+        size: 25,
+        color: 'ffffff',
       },
     ],
   },
@@ -102,6 +136,10 @@ __visitedCountries__ países
     scene: 5,
     duration: 8,
     source: 'iberia_001.mp4',
+    resolution: '1280x720',
+    fps: 30,
+    regularFont: 'Nexa-ExtraLight.ttf',
+    boldFont: 'Nexa-Heavy.ttf',
     videoTexts: [
       {
         text: `
@@ -110,6 +148,8 @@ Nada más y nada menos que
 `,
         style: VideoStyle.Regular,
         position: { x: '125', y: '90' },
+        size: 25,
+        color: 'ffffff',
       },
       {
         text: ` 
@@ -117,6 +157,8 @@ __traveledKms__ kilómetros
 `,
         style: VideoStyle.Bold,
         position: { x: '125', y: '180' },
+        size: 25,
+        color: 'ffffff',
       },
       {
         text: `
@@ -124,6 +166,8 @@ Lo que equivale a __traveledAroundEarth__ vueltas a la tierra
 `,
         style: VideoStyle.Regular,
         position: { x: '125', y: '240' },
+        size: 25,
+        color: 'ffffff',
       },
     ],
   },
@@ -131,6 +175,10 @@ Lo que equivale a __traveledAroundEarth__ vueltas a la tierra
     scene: 6,
     duration: 8,
     source: 'iberia_002.mp4',
+    resolution: '1280x720',
+    fps: 30,
+    regularFont: 'Nexa-ExtraLight.ttf',
+    boldFont: 'Nexa-Heavy.ttf',
     videoTexts: [
       {
         text: `
@@ -138,6 +186,8 @@ Hemos pasado un total de __traveledHours__ horas en el aire:
 `,
         style: VideoStyle.Regular,
         position: { x: '125', y: '90' },
+        size: 25,
+        color: 'ffffff',
       },
       {
         text: ` 
@@ -145,6 +195,8 @@ Más de __traveledTime__ __traveledUnitTime__ volando
 `,
         style: VideoStyle.Bold,
         position: { x: '125', y: '160' },
+        size: 25,
+        color: 'ffffff',
       },
       {
         text: `
@@ -152,6 +204,8 @@ Ojalá hayas disfrutado del viaje...
 `,
         style: VideoStyle.Regular,
         position: { x: '125', y: '210' },
+        size: 25,
+        color: 'ffffff',
       },
     ],
   },
@@ -159,6 +213,10 @@ Ojalá hayas disfrutado del viaje...
     scene: 7,
     duration: 8,
     source: 'iberia_001.mp4',
+    resolution: '1280x720',
+    fps: 30,
+    regularFont: 'Nexa-ExtraLight.ttf',
+    boldFont: 'Nexa-Heavy.ttf',
     videoTexts: [
       {
         text: `
@@ -166,6 +224,8 @@ El __mostUsedPlane__
 `,
         style: VideoStyle.Bold,
         position: { x: '125', y: '90' },
+        size: 25,
+        color: 'ffffff',
       },
       {
         text: ` 
@@ -174,6 +234,8 @@ utilizándolo en tus vuelos a __mostTraveledZones__.
 `,
         style: VideoStyle.Regular,
         position: { x: '125', y: '120' },
+        size: 25,
+        color: 'ffffff',
       },
     ],
   },
@@ -181,6 +243,10 @@ utilizándolo en tus vuelos a __mostTraveledZones__.
     scene: 8,
     duration: 8,
     source: 'iberia_002.mp4',
+    resolution: '1280x720',
+    fps: 30,
+    regularFont: 'Nexa-ExtraLight.ttf',
+    boldFont: 'Nexa-Heavy.ttf',
     videoTexts: [
       {
         text: `
@@ -188,6 +254,8 @@ Y nuestro último viaje juntos ha sido hace __lastFlightTime__ __lastFlightUnitT
 `,
         style: VideoStyle.Bold,
         position: { x: '125', y: '90' },
+        size: 25,
+        color: 'ffffff',
       },
       {
         text: ` 
@@ -197,6 +265,8 @@ Esperamos que todo fuera de tu agrado.
 `,
         style: VideoStyle.Regular,
         position: { x: '125', y: '150' },
+        size: 25,
+        color: 'ffffff',
       },
     ],
   },
@@ -204,6 +274,10 @@ Esperamos que todo fuera de tu agrado.
     scene: 9,
     duration: 8,
     source: 'iberia_001.mp4',
+    resolution: '1280x720',
+    fps: 30,
+    regularFont: 'Nexa-ExtraLight.ttf',
+    boldFont: 'Nexa-Heavy.ttf',
     videoTexts: [
       {
         text: `
@@ -211,6 +285,8 @@ En este momento dispones de un total de:
 `,
         style: VideoStyle.Regular,
         position: { x: '125', y: '90' },
+        size: 25,
+        color: 'ffffff',
       },
       {
         text: ` 
@@ -218,6 +294,8 @@ __totalAvios__ Avios
 `,
         style: VideoStyle.Bold,
         position: { x: '125', y: '160' },
+        size: 25,
+        color: 'ffffff',
       },
       {
         text: `
@@ -225,6 +303,8 @@ que puedes canjear por vuelos y otras experiencias.
 `,
         style: VideoStyle.Regular,
         position: { x: '125', y: '210' },
+        size: 25,
+        color: 'ffffff',
       },
     ],
   },
@@ -232,6 +312,10 @@ que puedes canjear por vuelos y otras experiencias.
     scene: 10,
     duration: 8,
     source: 'iberia_002.mp4',
+    resolution: '1280x720',
+    fps: 30,
+    regularFont: 'Nexa-ExtraLight.ttf',
+    boldFont: 'Nexa-Heavy.ttf',
     videoTexts: [
       {
         text: `
@@ -239,6 +323,8 @@ Queremos que continúes disfrutando de tus viajes,
 `,
         style: VideoStyle.Regular,
         position: { x: '125', y: '90' },
+        size: 25,
+        color: 'ffffff',
       },
       {
         text: ` 
@@ -246,6 +332,8 @@ mientras recorres el mundo con nosotros...
 `,
         style: VideoStyle.Bold,
         position: { x: '125', y: '120' },
+        size: 25,
+        color: 'ffffff',
       },
     ],
   },
@@ -253,6 +341,10 @@ mientras recorres el mundo con nosotros...
     scene: 11,
     duration: 8,
     source: 'iberia_001.mp4',
+    resolution: '1280x720',
+    fps: 30,
+    regularFont: 'Nexa-ExtraLight.ttf',
+    boldFont: 'Nexa-Heavy.ttf',
     videoTexts: [
       {
         text: `
@@ -260,6 +352,8 @@ Ha sido un placer acompañarte en tus vuelos todo este tiempo y
 `,
         style: VideoStyle.Regular,
         position: { x: '125', y: '90' },
+        size: 25,
+        color: 'ffffff',
       },
       {
         text: ` 
@@ -267,6 +361,8 @@ te esperamos de nuevo a bordo, ¡muy pronto!
 `,
         style: VideoStyle.Bold,
         position: { x: '125', y: '120' },
+        size: 25,
+        color: 'ffffff',
       },
     ],
   },
