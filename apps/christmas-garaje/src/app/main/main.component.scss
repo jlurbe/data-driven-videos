@@ -14,6 +14,13 @@
     font-size: 18px;
   }
 
+  video {
+    max-width: 720px;
+    width: 100%;
+    margin: 0 auto;
+    aspect-ratio: 9 / 16;
+  }
+
   .btn-google {
     color: var(--color-brand-white);
     background-color: var(--color-background-black);
