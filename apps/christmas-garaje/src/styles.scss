@@ -42,7 +42,8 @@ a,
 button:hover,
 li.follow-us__link,
 .button:hover {
-  cursor: url('./assets/img/cursor/pink_pointer.png') 12 2, default;
+  // cursor: url('./assets/img/cursor/pink_pointer.png') 12 2, pointer;
+  cursor: pointer;
 }
 
 .link-hover {
