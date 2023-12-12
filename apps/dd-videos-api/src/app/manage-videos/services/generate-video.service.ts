@@ -154,7 +154,16 @@ export class GenerateVideoService {
     tmpFolder,
     audioFile,
   }: MergeVideosModel): Promise<void> {
-    const inputVideoFilePath = `${tmpFolder}/${this.uuid}.mp4`;
+    let inputVideoFilePath: string;
+    let projectDir = '';
+
+    if (audioFile !== '') {
+      inputVideoFilePath = `${tmpFolder}/${this.uuid}.mp4`;
+    } else {
+      projectDir = `project${this.projectId.toString().padStart(2, '0')}`;
+      const projectPath = `${config.api.tmpPath}/${projectDir}/processed`;
+      inputVideoFilePath = `${projectPath}/${this.uuid}.mp4`;
+    }
 
     return new Promise((resolve, reject) => {
       const mergedVideo = ffmpeg();
@@ -173,16 +182,20 @@ export class GenerateVideoService {
           this.logger.error(`${this.uuid}: An error occurred: ${err.message}`);
           reject();
         })
-        .on('end', () => {
+        .on('end', async () => {
           this.logger.log(`${this.uuid}: Merging ${this.uuid}.mp4 finished`);
-
-          // Add audio track
-          resolve(
-            this.addMusicTrack({
-              audioFile,
-              tmpFolder,
-            })
-          );
+          if (audioFile !== '') {
+            // Add audio track
+            resolve(
+              this.addMusicTrack({
+                audioFile,
+                tmpFolder,
+              })
+            );
+          } else {
+            await this.uploadToS3(inputVideoFilePath, projectDir);
+            resolve();
+          }
         })
         .mergeToFile(inputVideoFilePath, tmpFolder);
     });
@@ -223,13 +236,8 @@ export class GenerateVideoService {
           this.logger.log(`${this.uuid}: Removed tmp folder - ${tmpFolder}`);
           this.logger.log(`${this.uuid}: Adding audio track completed`);
 
-          if (config.api.uploadMode === UploadMode.S3) {
-            await ManageUploadFiles.uploadToS3({
-              filePath: outputVideoFilePath,
-              objectKey: `${projectDir}/${this.uuid}.mp4`,
-              bucketName: config.aws.s3.bucketName,
-            });
-          }
+          await this.uploadToS3(outputVideoFilePath, projectDir);
+
           resolve();
         })
         .run();
@@ -280,5 +288,18 @@ export class GenerateVideoService {
     ];
 
     return videoExtensions.includes(extension);
+  }
+
+  private async uploadToS3(
+    outputVideoFilePath: string,
+    projectDir: string
+  ): Promise<void> {
+    if (config.api.uploadMode === UploadMode.S3) {
+      await ManageUploadFiles.uploadToS3({
+        filePath: outputVideoFilePath,
+        objectKey: `${projectDir}/${this.uuid}.mp4`,
+        bucketName: config.aws.s3.bucketName,
+      });
+    }
   }
 }
