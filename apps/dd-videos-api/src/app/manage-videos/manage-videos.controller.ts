@@ -55,18 +55,26 @@ export class ManageVideosController {
         projectFolder,
       });
 
-      await Promise.allSettled(
-        fillInData.map(async (data) => {
-          if (!processedVideos.includes(data.uuid)) {
+      const filteredFillInData = fillInData.filter(
+        (data) => !processedVideos.includes(data.uuid)
+      );
+
+      // Divides the array en pieces of 2 elements
+      const batches = this.chunk(filteredFillInData, config.api.batchSize);
+
+      // Process all videos in batches
+      for (const batch of batches) {
+        await Promise.allSettled(
+          batch.map(async (data) => {
             await new GenerateVideoService(this.logger).formatVideo({
               videoScenes: [...scenes],
               audioFile,
               data,
               projectId,
             });
-          }
-        })
-      );
+          })
+        );
+      }
 
       return { message: 'success' };
     } catch (error) {
@@ -112,18 +120,26 @@ export class ManageVideosController {
         projectFolder,
       });
 
-      await Promise.allSettled(
-        fillInData.map(async (data) => {
-          if (!processedVideos.includes(data.uuid)) {
+      const filteredFillInData = fillInData.filter(
+        (data) => !processedVideos.includes(data.uuid)
+      );
+
+      // Divides the array en pieces of 2 elements
+      const batches = this.chunk(filteredFillInData, config.api.batchSize);
+
+      // Process all videos in batches
+      for (const batch of batches) {
+        await Promise.allSettled(
+          batch.map(async (data) => {
             await new GenerateVideoService(this.logger).formatVideo({
               videoScenes: [...scenes],
               audioFile,
               data,
               projectId,
             });
-          }
-        })
-      );
+          })
+        );
+      }
 
       return { message: 'success' };
     } catch (error) {
@@ -163,5 +179,14 @@ export class ManageVideosController {
     }
 
     return processedVideos;
+  }
+
+  // Divides an array in pieces
+  private chunk(array, size) {
+    const result = [];
+    for (let i = 0; i < array.length; i += size) {
+      result.push(array.slice(i, i + size));
+    }
+    return result;
   }
 }

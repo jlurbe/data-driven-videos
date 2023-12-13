@@ -6,6 +6,7 @@ export interface DDVideosApiConfigModel {
     ffmpegNodeSources: boolean;
     spreadsheetId: string;
     tmpPath: string;
+    batchSize: number;
   };
   aws: {
     s3: {

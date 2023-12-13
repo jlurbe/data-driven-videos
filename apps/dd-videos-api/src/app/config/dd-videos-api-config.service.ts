@@ -20,6 +20,7 @@ export class DDVideosApiConfigService {
         ffmpegNodeSources: process.env.FFMPEG_NODE_SOURCES === 'true',
         spreadsheetId: process.env.SPREADSHEET_ID,
         tmpPath: process.env.TMP_PATH,
+        batchSize: parseInt(process.env.BATCH_SIZE) || 1,
       },
       aws: {
         s3: {
