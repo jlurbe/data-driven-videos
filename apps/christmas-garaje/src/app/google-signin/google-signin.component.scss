@@ -2,25 +2,25 @@
   color: var(--color-brand-white);
   background-color: var(--color-background-black);
   border: 1px solid transparent;
-  width: 240px;
-  height: 50px;
+  width: 170px;
+  height: 40px;
   margin: 0 auto;
 
   .g-icon {
     background-color: var(--color-brand-white);
-    padding: 13px;
+    padding: 10px;
     float: left;
 
     img {
-      width: 22px;
-      height: 22px;
+      width: 18px;
+      height: 18px;
     }
   }
 
   .g-text {
     font-family: 'Garaje Bold';
-    font-size: 16px;
-    line-height: 48px;
+    font-size: 14px;
+    line-height: 38px;
   }
 
   .hide {
@@ -31,5 +31,26 @@
     background-color: var(--color-background-black);
     transition: all 0.3s ease;
     box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+  }
+}
+
+@media (min-width: 410px) {
+  .btn-google {
+    width: 240px;
+    height: 50px;
+
+    .g-icon {
+      padding: 13px;
+
+      img {
+        width: 22px;
+        height: 22px;
+      }
+    }
+
+    .g-text {
+      font-size: 16px;
+      line-height: 48px;
+    }
   }
 }

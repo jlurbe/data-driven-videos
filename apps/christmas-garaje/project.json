@@ -16,7 +16,7 @@
         "polyfills": ["zone.js"],
         "tsConfig": "apps/christmas-garaje/tsconfig.app.json",
         "assets": [
-          "apps/christmas-garaje/src/favicon.ico",
+          "apps/christmas-garaje/src/favicon.png",
           "apps/christmas-garaje/src/assets"
         ],
         "styles": ["apps/christmas-garaje/src/styles.scss"],
