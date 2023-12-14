@@ -28,10 +28,12 @@
 
   main {
     grid-area: main;
+    width: 100vw;
   }
 
   footer {
     grid-area: footer;
+    width: 100vw;
   }
 }
 

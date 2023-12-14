@@ -260,6 +260,42 @@
   }
 }
 
+@media (max-width: 410px) {
+  .follow-us .wrapper {
+    overflow-y: auto;
+    margin: 0;
+  }
+  .follow-us .follow-us__list li:first-child {
+    display: none;
+  }
+
+  .footer__title .title {
+    font-size: 25px;
+    line-height: 25px;
+  }
+  .office__content .text-large {
+    font-size: 14px;
+    line-height: 25px;
+  }
+
+  .office__title {
+    height: 5.4rem;
+
+    & > p {
+      font-size: 20px;
+    }
+
+    .header_heading04 {
+      font-size: 20px;
+    }
+  }
+
+  .follow-us__list li.follow-us__link {
+    font-size: 18px;
+    padding: 0.1rem 0.8rem;
+  }
+}
+
 @media (min-width: 768px) {
   .follow-us__list {
     margin: 0;
