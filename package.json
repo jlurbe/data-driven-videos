@@ -4,7 +4,9 @@
   "license": "MIT",
   "scripts": {
     "start:api": "nx serve dd-videos-api",
-    "build:api": "nx build dd-videos-api"
+    "build:api": "nx build dd-videos-api",
+    "start:christmas-garaje": "nx serve christmas-garaje",
+    "build:christmas-garaje": "nx build christmas-garaje"
   },
   "private": true,
   "dependencies": {

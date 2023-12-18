@@ -1,6 +1,9 @@
 # Data Driven Videos
 
-This repository contains an application called "dd-videos-api" that manages the dynamic creation of videos based on information from a Google Sheets spreadsheet used as a database.
+This monorepo contains:
+
+- A NodeJS application called "dd-videos-api" that manages the dynamic creation of videos based on information from a Google Sheets spreadsheet used as a database.
+- An angular front-end that shows a landing where a user can login with its Google account and can watch and download the generated video.
 
 ## Scripts
 
@@ -8,6 +11,8 @@ The following scripts are available in this repository:
 
 - `start:api`: Starts the API server for the "dd-videos-api" application. You can run this script with the command `npm run start:api`.
 - `build:api`: Builds the "dd-videos-api" application. You can run this script with the command `npm run start:api`.
+- `start:christmas-video`: Starts the angular front-end. You can run this script with the command `npm run start:christmas-video`.
+- `build:api`: Builds the "christmas-video" front-end. You can run this script with the command `npm run start:api`.
 
 ## Ffmpeg library
 
@@ -39,3 +44,7 @@ The spreadsheet has the following tabs:
 - **scenes**: id, projectId, duration, source
 - **scene_texts**: id, projectId,sceneId, style, x, y, text
 - ***data_iberia*** (example of `dataTable`): uuid (mandatory), name, firstFlightDate...
+
+## Google login
+
+For login users in our angular front-end, we use a Google login and we configure it from the Google developers console. Here there is a tutorial using the package we use in our projec, @abacritt/angularx-social-login: <https://dev.to/omamaaslam/angular-16-google-social-login-or-signin-tutorial-46ka>
