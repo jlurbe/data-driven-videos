@@ -1,5 +1,4 @@
 import {
-  Body,
   Controller,
   Get,
   HttpException,
@@ -7,7 +6,6 @@ import {
   Inject,
   Logger,
   Param,
-  Post,
 } from '@nestjs/common';
 import fs from 'node:fs';
 import { ManageVideosService } from './services/manage-videos.service';
