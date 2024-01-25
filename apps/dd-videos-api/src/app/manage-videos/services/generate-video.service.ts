@@ -228,7 +228,7 @@ export class GenerateVideoService {
         })
         .on('error', (err) => {
           this.logger.error(`${this.uuid}: An error occurred: ${err.message}`);
-          reject;
+          reject();
         })
         .on('end', async () => {
           // remove tmp folder
